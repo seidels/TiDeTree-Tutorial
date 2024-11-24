@@ -1,21 +1,58 @@
 ---
-author: Author I. Name
+author: Sophie Seidel
 level: Intermediate
-title: Tutorial template
-subtitle: Template for an empty tutorial
-beastversion: 2.4.2
+title: TiDeTree Tutorial
+subtitle: Reconstruction time-scaled single-cell phylogenies from genetic lineage tracing data
+beastversion: >= 2.7.
 ---
 
 
 # Background
 
-This is a template tutorial and style guide to help formatting Markdown tutorials. 
+# Background
 
-Please start the tutorial by adding some background about the tutorial in this section, clearly explaining the question/problem and the type of analysis that the methods in the tutorial should be used for. In the next section please add a short description of all the programs or packages used in the tutorial. The tutorial exercise should follow this part. Please add a short explanation on the dataset used in the tutorial before starting with the exercise. Please also add a section after the exercise interpreting the results. End your tutorial with some useful links.
+## Introduction
 
-Some of the text in this tutorial template is just dummy filler text. Please do not try to understand it.
+### Understanding cell dynamics
 
-----
+This tutorial focuses on using TiDeTree to address key questions in developmental biology and cellular population dynamics. Specifically, TiDeTree is designed to tackle the following challenges:
+
+1. **Reconstructing Time-Scaled Single-Cell Phylogenies:** How can we accurately infer the evolutionary relationships among individual cells in a population using genetic lineage tracing data?
+2. **Estimating Population Dynamics:** How can we quantify cell division, death, and differentiation rates from lineage tracing experiments to better understand cellular behaviors over time?
+
+These questions are central to studying developmental processes, such as tissue formation, cancer progression, or immune cell dynamics.
+
+## TiDeTree Foundations
+
+TiDeTree is a BEAST 2 package designed for inferring time-scaled single-cell phylogenies and estimating population dynamics parameters such as cell division, death, and differentiation rates. It is specifically tailored for analyzing genetic lineage tracing data, where random edits introduced through technologies like CRISPR-Cas9 allow tracking of cell lineages over time. TiDeTree incorporates a specialized editing and silencing model to account for the unique features of lineage tracing data:
+
+1. **Editing Events:** Genetic modifications (e.g., insertions or deletions introduced by CRISPR-Cas9) serve as markers of lineage history.
+
+2. **Silencing Events:** The model accounts for the possibility that some edits may become undetectable due to biological processes like gene silencing.
+
+This dual approach enables accurate reconstruction of cell lineages and robust estimation of underlying population dynamics.
+
+## Objectives
+
+This tutorial aims to equip users with the knowledge and skills to use TiDeTree for their own research. Specifically, by following the tutorial, users will:
+
+1. Understand the purpose and applications of TiDeTree in single-cell phylogenetics and population dynamics.
+2. Gain theoretical insights into Bayesian methods and the editing-silencing model used by TiDeTree.
+3. Learn how to prepare genetic lineage tracing data for analysis.
+4. Successfully install TiDeTree and set up the required software environment.
+5. Run example analyses to infer phylogenies and estimate population parameters.
+6. Interpret results and understand how to adjust parameter settings for different datasets.
+
+This tutorial is designed for researchers working with single-cell data, developmental biology, or lineage tracing studies, and assumes basic familiarity with phylogenetic concepts and BEAST 2.
+
+## Prerequisites
+
+Before starting this tutorial, users should ensure they have:
+
+- Basic knowledge of phylogenetics and Bayesian inference.
+- Java 17 installed (required for BEAST 2).
+- BEAST 2 and TiDeTree installed on their computer.
+- Example genetic lineage tracing data formatted according to TiDeTree specifications.
 
 # Programs used in this Exercise 
 
@@ -23,6 +60,12 @@ Some of the text in this tutorial template is just dummy filler text. Please do 
 
 BEAST2 is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees {% cite Bouckaert2014 --file Tutorial-Template/master-refs.bib %}. This tutorial uses the BEAST2 version 2.4.2.
 
+### BEAUti – Bayesian Evolutionary Analysis Utility
+BEAUti is a utility program with a graphical user interface for creating BEAST2 input files, which are written in XML. The eXtensible Markup Language (XML) is a general-purpose markup language, which allows for the combination of text and additional information. The use of the XML makes analysis specification very flexible and readable by both the program and people. The XML file specifies all the components of the analysis, including sequences, node calibrations, models, priors, output file names.
+
+
+### Tracer
+Tracer is used for assessing and summarizing the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and assessment of convergence and it also calculates 95% credible intervals (which approximate the 95% highest posterior density intervals) and effective sample sizes (ESS) of parameters. Contrary to the other software in this section, Tracer is not distributed with BEAST2 and needs to be downloaded separately [here](https://beast.community/tracer).
 ----
 
 # Practical: Exercise title
