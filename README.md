@@ -77,8 +77,21 @@ The aim is to:
 - Get to know how to choose the set-up of such an analysis
 - Learn how to read the output of a TiDeTree analysis
 
-# Setting up an analysis in BEAUti
-### Download TiDeTree
+## The Data
+
+In this tutorial, we’ll work with a dataset where a single mouse embryonic stem cell was grown in vitro for 54 hours to form a colony. Actually, we have data from 106 such colonies! At the end of the experiment, a colony contains between 3 and 39 cells, and we have alignments for all of them. However, in this tutorial we will work with a subset of 10 colonies to keep our analysis manageable.
+
+To understand how the cells divide over time, each colony was lineage traced using the intMEMOIR system. This system uses a barcode made up of 10 target sites that can be edited by a recombinase. The recombinase can either invert or delete a site, creating a unique editing pattern over time. All barcodes start off unedited at the beginning of the experiment.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/3-data.png">
+    <figcaption></figcaption>
+</figure>
+
+
+## Setting up the analysis in BEAUti
+
 
 
 
