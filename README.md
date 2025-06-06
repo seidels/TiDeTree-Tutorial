@@ -2,57 +2,86 @@
 author: Sophie Seidel
 level: Intermediate
 title: TiDeTree Tutorial
-subtitle: Reconstruction time-scaled single-cell phylogenies from genetic lineage tracing data
+subtitle: Reconstructing time-scaled single-cell phylogenies from genetic lineage tracing data
 beastversion: >= 2.7.
 ---
 
 
 # Background
 
-## Introduction
+Understanding how cells divide, differentiate, and die over time is central to developmental biology and cancer research. Recent advances in single-cell lineage recording allow us to track cell histories —but inferring developmental dynamics from these data requires statistical tools {% cite Askary2024 --file TiDeTree-Tutorial/master-refs %} .
 
-### Understanding cell dynamics
+TiDeTree {% cite Seidel2022 --file TiDeTree-Tutorial/master-refs %} is a BEAST 2 package designed for statistical inference from such single-cell recodring data. It jointly infers time-scaled cell phylogenies and editing model parameters, including editing rates (analogous to molecular clock rates) and the probabilities of different editing outcomes. Beyond tree reconstruction, TiDeTree enables the inference of cell population dynamics, such as cell division, death and differentiation rates.
 
-This tutorial focuses on using TiDeTree to address key questions in developmental biology and cellular population dynamics. Specifically, TiDeTree is designed to tackle the following challenges:
+This tutorial will guide you through the setup and application of TiDeTree using an example dataset. You will learn how to model the editing process, reconstruct timed cell phylogenies, and estimate parameters describing the underlying cellular dynamics.
 
-1. **Reconstructing Time-Scaled Single-Cell Phylogenies:** How can we accurately infer the evolutionary relationships among individual cells in a population using genetic lineage tracing data?
-2. **Estimating Population Dynamics:** How can we quantify cell division, death, and differentiation rates from lineage tracing experiments to better understand cellular behaviors over time?
+----
 
-These questions are central to studying developmental processes, such as tissue formation, cancer progression, or immune cell dynamics.
+# Programs used in this Exercise
 
-## TiDeTree Foundations
+### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees 2
 
-TiDeTree is a BEAST 2 package designed for inferring time-scaled single-cell phylogenies and estimating population dynamics parameters such as cell division, death, and differentiation rates. It is specifically tailored for analyzing genetic lineage tracing data, where random edits introduced through technologies like CRISPR-Cas9 allow tracking of cell lineages over time. TiDeTree incorporates a specialized editing and silencing model to account for the unique features of lineage tracing data:
+BEAST2 ([http://www.beast2.org](http://www.beast2.org)) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v{{ page.beastversion }} {% cite BEAST2book2014 --file TiDeTree-Tutorial/master-refs %}.
 
-1. **Editing Events:** Genetic modifications (e.g., insertions or deletions introduced by CRISPR-Cas9) serve as markers of lineage history.
+### BEAUti2 - Bayesian Evolutionary Analysis Utility
 
-2. **Silencing Events:** The model accounts for the possibility that some edits may become undetectable due to biological processes like gene silencing.
+BEAUti2 is a graphical user interface tool for generating BEAST2 XML configuration files.
 
-This dual approach enables accurate reconstruction of cell lineages and robust estimation of underlying population dynamics.
+Both BEAST2 and BEAUti2 are Java programs, which means that the exact same code runs on all platforms. For us it simply means that the interface will be the same on all platforms. The screenshots used in this tutorial are taken on a Mac OS X computer; however, both programs will have the same layout and functionality on both Windows and Linux. BEAUti2 is provided as a part of the BEAST2 package so you do not need to install it separately.
 
-## Objectives
+### TreeAnnotator
 
-This tutorial aims to equip users with the knowledge and skills to use TiDeTree for their own research. Specifically, by following the tutorial, users will:
+TreeAnnotator is used to produce a summary tree from the posterior sample of trees using one of the available algorithms. It can also be used to summarise and visualise the posterior estimates of other tree parameters (e.g. node height).
 
-1. Understand the purpose and applications of TiDeTree in single-cell phylogenetics and population dynamics.
-2. Gain theoretical insights into Bayesian methods and the editing-silencing model used by TiDeTree.
-3. Learn how to prepare genetic lineage tracing data for analysis.
-4. Successfully install TiDeTree and set up the required software environment.
-5. Run example analyses to infer phylogenies and estimate population parameters.
-6. Interpret results and understand how to adjust parameter settings for different datasets.
+TreeAnnotator is provided as a part of the BEAST2 package so you do not need to install it separately.
 
-This tutorial is designed for researchers working with single-cell data, developmental biology, or lineage tracing studies, and assumes basic familiarity with phylogenetic concepts and BEAST 2.
+### Tracer
 
-## Prerequisites
+Tracer ([http://tree.bio.ed.ac.uk/software/tracer](http://tree.bio.ed.ac.uk/software/tracer)) is used to summarise the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and to assess convergence. It helps to quickly view median estimates and 95% highest posterior density intervals of the parameters, and calculates the effective sample sizes (ESS) of parameters. It can also be used to investigate potential parameter correlations. We will be using Tracer v{{ page.tracerversion }}.
 
-Before starting this tutorial, users should ensure they have:
+### FigTree
 
-- BEAST 2 version 2.7 or later. [http://www.beast2.org/](http://www.beast2.org/)
-- Tracer version 1.7 or later. [https://github.com/beast-dev/tracer/releases/latest](https://github.com/beast-dev/tracer/releases/latest)
+FigTree ([http://tree.bio.ed.ac.uk/software/figtree](http://tree.bio.ed.ac.uk/software/figtree)) is a program for viewing trees and producing publication-quality figures. It can interpret the node-annotations created on the summary trees by TreeAnnotator, allowing the user to display node-based statistics (e.g. posterior probabilities). We will be using FigTree v{{ page.figtreeversion }}.
 
-# TiDeTree Package Installation [TODO]
+----
 
-# Setting up the analysis
+# TiDeTree Installation
+
+TiDeTree can be easily installed via the BEAUti package manager. To do this, open BEAUti and go to the “File” menu and click on “Manage packages”:
+
+<figure>
+    <!--a id="fig:beauti"></a-->
+    <img style="width:80%;" src="figures/1-beauti.png">
+    <figcaption></figcaption>
+</figure>
+
+
+Then scroll down, highlight the TiDeTree package and click on the “Install/Upgrade” button:
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/2-download.png">
+    <figcaption></figcaption>
+</figure>
+
+
+That’s it—TiDeTree is now ready to use! To ensure the package loads properly, restart BEAUti before continuing.
+
+
+
+# Practical: TiDeTree Tutorial
+
+In this tutorial, we will estimate editing rates and edit outcome probabilties, effective net growth rates using TiDeTree.
+
+The aim is to:
+- Learn how to infer time-scaled trees from single-cell lineage recording data
+- Get to know how to choose the set-up of such an analysis
+- Learn how to read the output of a TiDeTree analysis
+
+# Setting up an analysis in BEAUti
+### Download TiDeTree
+
+
 
 
 # Tutorial style guide
