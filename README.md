@@ -92,7 +92,7 @@ To understand how the cells divide over time, each colony was lineage traced usi
 ### Create the .tidetree input files
 Usually BEAST 2 expects an alignment of nucleotides as input. However, our alignment consists of integers, encoding the different editing outcomes (e.g. 0, 1 or 2). To still enable BEAUti to load our data, we have to create .tidetree files (which under the hood make BEAUti use an AlignmentFromNexus importer class that accepts integer values separated by commas).
 
-We provide (a script)[https://github.com/seidels/tidetree/tree/main/scripts] to convert standard .csv files into .tidetree files (in NEXUS format). For this tutorial, we will work directly with the .tidetree files.
+We provide [a script](https://github.com/seidels/tidetree/tree/main/scripts) to convert standard .csv files into .tidetree files (in NEXUS format). For this tutorial, we will work directly with the .tidetree files.
 
 <figure>
     <!--a id="fig:download"></a-->
