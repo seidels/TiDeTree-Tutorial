@@ -3,9 +3,8 @@ author: Sophie Seidel
 level: Intermediate
 title: TiDeTree Tutorial
 subtitle: Reconstructing time-scaled single-cell phylogenies from genetic lineage tracing data
-beastversion: >= 2.7.
+beastversion: ">= 2.7"
 ---
-
 
 # Background
 
