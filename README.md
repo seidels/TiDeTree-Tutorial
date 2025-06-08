@@ -100,8 +100,105 @@ We provide [a script](https://github.com/seidels/tidetree/tree/main/scripts) to 
     <figcaption>Exemplary data input file in csv format, where every cell in the table shows the editing outcome at a specific target site (column) for a given cell (row).</figcaption>
 </figure>
 
+TODO Question: What does the entry "0" in cell 2 at site 4 stand for?
+
 ## Setting up the analysis in BEAUti
 
+### Loading sequence data
+To load the data, select File->Import Alignment and navigate to the directory containing the tutorial data. This directory contains 10 .tidetree files, each containing the data for a colony. Since the directory contains only these files and nothing else, we can select them all simply using Ctrl+A (or Command+A on a Mac) and then press "Open".
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/5-dat-in-beauti.png">
+    <figcaption></figcaption>
+</figure>
+
+Now you should see 10 new records—one for each alignment—listed in BEAUti. By default, BEAUti treats each dataset independently, assigning separate site, clock, and tree models to each one. However, since all our data was generated under the same experimental conditions, it makes sense to assume that the editing process was governed by the same parameters across datasets.
+
+To reflect this, we’ll link the Clock Models and Site Models across the datasets. This means that instead of estimating separate parameters for each alignment, BEAST 2 will infer a single, shared set of parameters for the editing process.
+
+To do so, click on one row and then press Ctrl+A, or Command+A on a Mac to select all alignments. Then, press the "Link Site Models" and "Link Clock Models" buttons.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/6-linked-models.png">
+    <figcaption></figcaption>
+</figure>
+
+TODO Q: When we link models like this, we’re essentially pooling information to estimate shared parameters. Can you identify which specific parameters are estimated jointly when we link the Clock Models and the Site Models, respectively?
+
+### Specify the sampling times
+The data that we’ve loaded was sampled contemporaneously. We can therefore ignore the Tip Dates panel. When analyzing data where the samples were collected at very different times you’ll want to include those times in the analysis by modifying the contents of that panel.
+
+TODO - find a way to set the origin!
+
+### Specify the Site Model
+To specify the site model, move to the *Site Model* tab. As you have loaded the .tidetree data, BEAUti directly recognized that you will be using the TiDeTree Substitution Model.
+
+We leave the "Gamma Category Count" at 0, which means that we are not modelling site heterogeneity. We can further see the "Edit Probabilities". BEAUti correctly recognised based on the .tidetree files that we have 2 edit outcomes and therefore initialised a vector with 2 elements.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/7-substmodel.png">
+    <figcaption></figcaption>
+</figure>
+
+TODO Make sure the correct number of edit probabilities is appearing and the Sci Phy Substmodel is changed in BEAUTI!!
+
+TODO Q: Why do may we want to allow for variable edit probabilities?
+
+### Set the clock model
+Now, we move to the *Clock Model* tab. For this relatively short experiment, we assume that the rate of editing did not change. Thus, we keep the "Strict Clock"
+
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/8-clock.png">
+    <figcaption></figcaption>
+</figure>
+
+
+TODO Q : All our tips are sampled contemporaneously here. Why can we still estimate the clock rate?
+
+### Set priors
+Now, we want to set the priors for the parameters of our model under the *Priors* tab.
+
+We'll start by choosing the phylodynamic model that describes how the trees were generated. Given the small size of the cell population (4 − 40 cells), we expect the population growth process to be highly stochastic. The birth-death-sampling model can account for these stochastic fluctuations.
+
+
+In BEAUti, you'll notice that a separate prior is defined for every tree. Since all colonies were grown under the same experimental conditions, we want them to share the same birth and death rate parameters. Unfortunately, BEAUti doesn’t currently support linking these priors directly through the interface. So instead, we’ll define the prior for one tree in BEAUti as described above, and then manually link the corresponding parameters across all trees by editing the XML file.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/9-trees.png">
+    <figcaption></figcaption>
+</figure>
+
+So, for alignment 1, we pick "Birth-death model" from the drop-down menu. Then, we specify the effective birth rate of the Birth-death model, which is the cell division minus the cell death rate. We pick a Uniform prior over [0, 0.1]. This reflects our expectation that the total number of cells remains below 220 at the end of the experiment (after 54 h). 
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/10-birth-rate.png">
+    <figcaption>Specifying the effective birth rate</figcaption>
+</figure>
+
+
+Additionally, we place a Uniform prior over [0, 1] on the cell turnover (death rate / birth rate), stating that we expect the birth rate to be larger than the death rate.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/11-death-rate.png">
+    <figcaption>Specifying the effective birth rate</figcaption>
+</figure>
+
+TODO clock rate should be made available in prior window!
+
+
+Prior for
+
+
+
+### Starting tree panel TODO!!!
 
 
 
