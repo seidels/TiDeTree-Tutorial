@@ -212,7 +212,7 @@ So, for each alignment, we pick "Birth-death model" from the drop-down menu. The
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/10-birth-rate.png">
-    <figcaption>Specifying the effective birth rate</figcaption>
+    <figcaption></figcaption>
 </figure>
 
 
@@ -221,7 +221,7 @@ Additionally, we place a Uniform prior over [0, 1] on the relative death rate or
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/11-death-rate.png">
-    <figcaption>Specifying the effective death rate</figcaption>
+    <figcaption></figcaption>
 </figure>
 
 
