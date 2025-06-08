@@ -100,9 +100,11 @@ We provide [a script](https://github.com/seidels/tidetree/tree/main/scripts) to 
     <figcaption>Exemplary data input file in csv format, where every cell in the table shows the editing outcome at a specific target site (column) for a given cell (row).</figcaption>
 </figure>
 
-TODO Question: What does the entry "0" in cell 2 at site 4 stand for?
+TODO Q: What does the entry "0" in cell 2 at site 4 stand for?
 
 ## Setting up the analysis in BEAUti
+
+At the start, we load the TiDeTree template by selecting File -> Template -> TiDeTree.
 
 ### Loading sequence data
 To load the data, select File->Import Alignment and navigate to the directory containing the tutorial data. This directory contains 10 .tidetree files, each containing the data for a colony. Since the directory contains only these files and nothing else, we can select them all simply using Ctrl+A (or Command+A on a Mac) and then press "Open".
@@ -130,12 +132,13 @@ TODO Q: When we link models like this, we’re essentially pooling information t
 ### Specify the sampling times
 The data that we’ve loaded was sampled contemporaneously. We can therefore ignore the Tip Dates panel. When analyzing data where the samples were collected at very different times you’ll want to include those times in the analysis by modifying the contents of that panel.
 
-TODO - find a way to set the origin!
 
 ### Specify the Site Model
-To specify the site model, move to the *Site Model* tab. As you have loaded the .tidetree data, BEAUti directly recognized that you will be using the TiDeTree Substitution Model.
+Next, navigate to the *Site Model* tab. As you have loaded the TiDeTree template, BEAUti directly provides you with the TiDeTree Substitution Model.
 
-We leave the "Gamma Category Count" at 0, which means that we are not modelling site heterogeneity. We can further see the "Edit Probabilities". BEAUti correctly recognised based on the .tidetree files that we have 2 edit outcomes and therefore initialised a vector with 2 elements.
+We keep the "Gamma Category Count" set at 0, which means that we are not modelling site heterogeneity. Further below, you can see the parameters of the substition model. The "Edit Rates" are initialised and set to be estimated. Based on the .tidetree files, BEAUti correctly detected that there are 2 edit outcomes and therefore initialised a vector with 2 elements.
+
+You’ll also see the Silencing Rate parameter, which models the possibility that certain barcode targets become progressively and irreversibly silenced—preventing their detection through single-cell RNA sequencing. In our dataset, no silencing was observed, so we set the value to 0.0 and uncheck the estimate box. Lastly, we set the Edit Height and Edit Duration to 54, since editing was active for the entire duration of the experiment (54 hours).
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -143,9 +146,8 @@ We leave the "Gamma Category Count" at 0, which means that we are not modelling 
     <figcaption></figcaption>
 </figure>
 
-TODO Make sure the correct number of edit probabilities is appearing and the Sci Phy Substmodel is changed in BEAUTI!!
 
-TODO Q: Why do may we want to allow for variable edit probabilities?
+TODO Q: Why do may we want to allow for variable edit rates?
 
 ### Set the clock model
 Now, we move to the *Clock Model* tab. For this relatively short experiment, we assume that the rate of editing did not change. Thus, we keep the "Strict Clock"
@@ -158,7 +160,36 @@ Now, we move to the *Clock Model* tab. For this relatively short experiment, we 
 </figure>
 
 
-TODO Q : All our tips are sampled contemporaneously here. Why can we still estimate the clock rate?
+TODO Q: All our tips are sampled contemporaneously here. Why can we still estimate the clock rate?
+
+### Initialization
+Next, we come to the parameter initialization tab. Here, we will initialise the tree and experiment length for every alignment. This is also a great example of a step that’s much easier to edit directly in the XML—consider this your gentle nudge to get comfortable with a bit of XML hacking! ;)
+
+We'll initialise the tree using a custom starting tree class. The key idea is to ensure that the tree fits within the timeframe of the experiment and does not have a 0 likelihood. By setting the root height close to the total duration (e.g., 53 hours for a 54-hour experiment), and matching the editing height and editing duration, we ensure that the tree has a positive likelihood.
+
+So, go ahead and set the root height, editing height, and editing duration to 53 for all trees for alignments.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/9-init-tree.png">
+    <figcaption></figcaption>
+</figure>
+
+Further, we will set every experiment length to 54 hours and uncheck the "estimate" mark because we do not want to estimate it.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/10-init-experiment-length.png">
+    <figcaption></figcaption>
+</figure>
+
+Finally, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution we will set up next.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/11-init-birth-rate.png">
+    <figcaption></figcaption>
+</figure>
 
 ### Set priors
 Now, we want to set the priors for the parameters of our model under the *Priors* tab.
@@ -166,7 +197,9 @@ Now, we want to set the priors for the parameters of our model under the *Priors
 We'll start by choosing the phylodynamic model that describes how the trees were generated. Given the small size of the cell population (4 − 40 cells), we expect the population growth process to be highly stochastic. The birth-death-sampling model can account for these stochastic fluctuations.
 
 
-In BEAUti, you'll notice that a separate prior is defined for every tree. Since all colonies were grown under the same experimental conditions, we want them to share the same birth and death rate parameters. Unfortunately, BEAUti doesn’t currently support linking these priors directly through the interface. So instead, we’ll define the prior for one tree in BEAUti as described above, and then manually link the corresponding parameters across all trees by editing the XML file.
+In BEAUti, you'll notice that a separate prior is defined for every tree. Since all colonies were grown under the same experimental conditions, we want them to share the same birth and death rate parameters. Unfortunately, BEAUti doesn’t currently support linking these priors directly through the interface. So we will first create an xml with separate parameters for each colony, and in a second step link the parameters by editing the XML and see how the runs compare.
+
+TODO Q: How do you expect the runs to differ?
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -174,7 +207,7 @@ In BEAUti, you'll notice that a separate prior is defined for every tree. Since 
     <figcaption></figcaption>
 </figure>
 
-So, for alignment 1, we pick "Birth-death model" from the drop-down menu. Then, we specify the effective birth rate of the Birth-death model, which is the cell division minus the cell death rate. We pick a Uniform prior over [0, 0.1]. This reflects our expectation that the total number of cells remains below 220 at the end of the experiment (after 54 h). 
+So, for each alignment, we pick "Birth-death model" from the drop-down menu. Then, we specify the effective birth rate of the Birth-death model, which is the cell division minus the cell death rate. We pick a Uniform prior over [0, 0.1]. This reflects our expectation that the total number of cells remains below 220 at the end of the experiment (after 54 h). 
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -183,177 +216,58 @@ So, for alignment 1, we pick "Birth-death model" from the drop-down menu. Then, 
 </figure>
 
 
-Additionally, we place a Uniform prior over [0, 1] on the cell turnover (death rate / birth rate), stating that we expect the birth rate to be larger than the death rate.
+Additionally, we place a Uniform prior over [0, 1] on the relative death rate or cell turnover (death rate / birth rate), stating that we expect the birth rate to be larger than the death rate.
 
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/11-death-rate.png">
-    <figcaption>Specifying the effective birth rate</figcaption>
+    <figcaption>Specifying the effective death rate</figcaption>
 </figure>
 
-TODO clock rate should be made available in prior window!
+
+Then we place a lognormal prior with mean -5 and sd 1 on the clock rate, which translates to us expecting between 1 to 10 edits to occur over 54 hours. We keep the Dirichlet prior on the edit probabilities.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/12-prior-clock.png">
+    <figcaption></figcaption>
+</figure>
+
+Here's a snapshot of how your overall prior tab should now look like.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/12-overall-priors.png">
+    <figcaption></figcaption>
+</figure>
 
 
-Prior for
+### MCMC
 
+Finally, set the **chain length** to `10^6` and the **sampling interval** to `10^3` under the *MCMC* tab. 
 
-
-### Starting tree panel TODO!!!
-
-
-
-
-# Tutorial style guide
-
-## Text styling
-
-This is how to write _italic text_.
-
-This is how to write **bold text**.
-
-This is how to write **_bold and italic text_**.
-
-Do text superscripts like this 7^th, x^2y or  x^(2y + 3z).
-
-
-## Lists
-
-### Unnumbered lists
-
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-- Integer pharetra arcu ut nisl mollis ultricies.
-	- Fusce nec tortor at enim cursus dictum.
-	- Phasellus nec urna quis velit eleifend convallis sodales nec augue.
-- In iaculis turpis in massa facilisis, quis ultricies nibh ultricies.
-- Nam vitae turpis eu lacus imperdiet mollis id at augue.
-- Sed sed turpis ac dolor mollis accumsan.
-
-
-### Numbered lists
-
-1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-2. Integer pharetra arcu ut nisl mollis ultricies.
-	1. Fusce nec tortor at enim cursus dictum.
-	2. Phasellus nec urna quis velit eleifend convallis sodales nec augue.
-1. In iaculis turpis in massa facilisis, quis ultricies nibh ultricies.
-1. Nam vitae turpis eu lacus imperdiet mollis id at augue.
-1. Sed sed turpis ac dolor mollis accumsan.
-
-### Mixed lists
-
-1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-2. Integer pharetra arcu ut nisl mollis ultricies.
-	* Fusce nec tortor at enim cursus dictum.
-	* Phasellus nec urna quis velit eleifend convallis sodales nec augue.
-1. In iaculis turpis in massa facilisis, quis ultricies nibh ultricies.
-1. Nam vitae turpis eu lacus imperdiet mollis id at augue.
-1. Sed sed turpis ac dolor mollis accumsan.
-
-
-## Figures
+Once your analysis is fully set up, go to **File → Save**, navigate to your desired directory, and save the BEAST input file with a clear and descriptive name—e.g., `tidetree_tutorial.xml`.
 
 
 <figure>
-	<a id="fig:example1"></a>
-	<img style="width:25%;" src="figures/Logo_bw.png" alt="">
-	<figcaption>Figure 1: This figure is 25% of the page width.</figcaption>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/15-MCMC.png">
+    <figcaption></figcaption>
 </figure>
 
 
-<figure>
-	<a id="fig:example2"></a>
-	<img style="width:10%;" src="figures/Logo_bw.png" alt="">
-	<figcaption>Figure 2: This figure is only 10% of the page width.</figcaption>
-</figure>
+ **Tip:** If BEAUti gives you trouble when generating the XML file and you’d like to proceed with the analysis right away, you can also download and use a pre-made XML file [link](https://github.com/seidels/TiDeTree-Tutorial/tree/master/precooked_runs/tutorial-unlinked-birth-death.xml).
+
+### 
 
 
 
-# Code
-
-A bit of inline monospaced font can be made `like this`. Larger code blocks can be made by using the code environment:
-
-Java:
-
-```java
-public class HelloWorld {
-
-    public static void main(String[] args) {
-        // Prints "Hello, World" to the terminal window.
-        System.out.println("Hello, World");
-    }
-
-}
-```
-
-XML:
-
-```xml
-	<BirthDeathSkylineModel spec="BirthDeathSkylineModel" id="birthDeath" tree="@tree" contemp="true">
-	      <parameter name="origin" id="origin" value ="100" lower="0."/>    
-	      <parameter name="R0" id="R0" value="2" lower="0." dimension ="10"/>
-	      <parameter name="becomeUninfectiousRate" id="becomeUninfectiousRate" value="1" lower="0." dimension ="10"/>
-	      <parameter name="samplingProportion" id="samplingProportion" value="0."/>
-	      <parameter name="rho" id="rho" value="1e-6" lower="0." upper="1."/>
-	</BirthDeathSkylineModel>
-```
-
-R:
-
-```R
-	> myString <- "Hello, World!"
-	> print (myString)
-	[1] "Hello, World!"
-```
-
-# Equations
-
-Inline equations: {% eqinline \dot{x} = \sigma(y-x) %}
-
-Displayed equations: 
-{% eq \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right) %}
-
-
-
-## Instruction boxes
-
-Use block-quotes for step-by-step instruction that the user should perform (this will produce a framed box on the website):
-
-> The data we have is not the data we want, and the data we need is not the data we have.
-> 
-> We can input **any** formatted text in here:
->
-> - Even
-> - Lists
->
-> or equations:
->
-> {% eq (x_1, \ldots, x_n) \left( \begin{array}{ccc}
-      \phi(e_1, e_1) & \cdots & \phi(e_1, e_n) \\
-      \vdots & \ddots & \vdots \\
-      \phi(e_n, e_1) & \cdots & \phi(e_n, e_n)
-    \end{array} \right)
-  \left( \begin{array}{c}
-      y_1 \\
-      \vdots \\
-      y_n
-    \end{array} \right) %}
-
-
-
-
-
-
-# Hyperlinks
-
-Add links to figures like this: 
-
-- [Figure 1](#fig:example1) is 25% of the page width.
-- [Figure 2](#fig:example2) is 10% of the page width. 
-
-Add links to external URLs like [this](http://www.google.com). 
-
-Links to equations or different sections within the same document are a little buggy.
-
+### TODOs
+Add starting tree class with edit height
+add clock priors
+add silencing rate plus prior, operator etc.
+set origin
+Make sure the correct number of edit probabilities is appearing and the Sci Phy Substmodel is changed in BEAUTI!!
 
 ----
 
