@@ -51,7 +51,7 @@ TiDeTree can be easily installed via the BEAUti package manager. To do this, ope
 <figure>
     <!--a id="fig:beauti"></a-->
     <img style="width:80%;" src="figures/1-beauti.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 1:</figcaption>
 </figure>
 
 
@@ -60,7 +60,7 @@ Then scroll down, highlight the TiDeTree package and click on the “Install/Upg
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/2-download.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 2:</figcaption>
 </figure>
 
 
@@ -86,7 +86,7 @@ To understand how the cells divide over time, each colony was lineage traced usi
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/3-data.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 3:</figcaption>
 </figure>
 
 ### Create the .tidetree input files
@@ -97,7 +97,7 @@ We provide [a script](https://github.com/seidels/tidetree/tree/main/scripts) to 
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/4-alignment.png">
-    <figcaption>Exemplary data input file in csv format, where every cell in the table shows the editing outcome at a specific target site (column) for a given cell (row).</figcaption>
+    <figcaption>Figure 4: Exemplary data input file in csv format, where every cell in the table shows the editing outcome at a specific target site (column) for a given cell (row).</figcaption>
 </figure>
 
 TODO Q: What does the entry "0" in cell 2 at site 4 stand for?
@@ -112,7 +112,7 @@ To load the data, select File->Import Alignment and navigate to the directory co
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/5-dat-in-beauti.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 5:</figcaption>
 </figure>
 
 Now you should see 10 new records—one for each alignment—listed in BEAUti. By default, BEAUti treats each dataset independently, assigning separate site, clock, and tree models to each one. However, since all our data was generated under the same experimental conditions, it makes sense to assume that the editing process was governed by the same parameters across datasets.
@@ -124,7 +124,7 @@ To do so, click on one row and then press Ctrl+A, or Command+A on a Mac to selec
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/6-linked-models.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 6:</figcaption>
 </figure>
 
 TODO Q: When we link models like this, we’re essentially pooling information to estimate shared parameters. Can you identify which specific parameters are estimated jointly when we link the Clock Models and the Site Models, respectively?
@@ -143,7 +143,7 @@ You’ll also see the Silencing Rate parameter, which models the possibility tha
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/7-substmodel.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 7:</figcaption>
 </figure>
 
 
@@ -156,7 +156,7 @@ Now, we move to the *Clock Model* tab. For this relatively short experiment, we 
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/8-clock.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 8:</figcaption>
 </figure>
 
 
@@ -172,7 +172,7 @@ So, go ahead and set the root height, editing height, and editing duration to 53
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/9-init-tree.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 9:</figcaption>
 </figure>
 
 Further, we will set every experiment length to 54 hours and uncheck the "estimate" mark because we do not want to estimate it.
@@ -180,7 +180,7 @@ Further, we will set every experiment length to 54 hours and uncheck the "estima
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/10-init-experiment-length.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 10:</figcaption>
 </figure>
 
 Finally, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution we will set up next.
@@ -188,7 +188,7 @@ Finally, we also want to set the initial value of the effective birth rate to 0.
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/11-init-birth-rate.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 11:</figcaption>
 </figure>
 
 ### Set priors
@@ -204,7 +204,7 @@ TODO Q: How do you expect the runs to differ?
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/9-trees.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 12:</figcaption>
 </figure>
 
 So, for each alignment, we pick "Birth-death model" from the drop-down menu. Then, we specify the effective birth rate of the Birth-death model, which is the cell division minus the cell death rate. We pick a Uniform prior over [0, 0.1]. This reflects our expectation that the total number of cells remains below 220 at the end of the experiment (after 54 h). 
@@ -212,7 +212,7 @@ So, for each alignment, we pick "Birth-death model" from the drop-down menu. The
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/10-birth-rate.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 13:</figcaption>
 </figure>
 
 
@@ -221,7 +221,7 @@ Additionally, we place a Uniform prior over [0, 1] on the relative death rate or
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/11-death-rate.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 14:</figcaption>
 </figure>
 
 
@@ -230,7 +230,7 @@ Then we place a lognormal prior with mean -5 and sd 1 on the clock rate, which t
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/12-prior-clock.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 15:</figcaption>
 </figure>
 
 Here's a snapshot of how your overall prior tab should now look like.
@@ -238,7 +238,7 @@ Here's a snapshot of how your overall prior tab should now look like.
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/12-overall-priors.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 16:</figcaption>
 </figure>
 
 
@@ -252,7 +252,7 @@ Once your analysis is fully set up, go to **File → Save**, navigate to your de
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/15-MCMC.png">
-    <figcaption></figcaption>
+    <figcaption>Figure 17:</figcaption>
 </figure>
 
 
