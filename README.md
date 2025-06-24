@@ -101,7 +101,15 @@ We provide [an R script](https://github.com/seidels/tidetree/tree/main/scripts) 
     <figcaption>Figure 4: Exemplary data input file in .csv format, where every cell in the table shows the editing outcome at a specific target site (column) for a given cell (row).</figcaption>
 </figure>
 
-TODO Q: What does the entry "0" in cell 2 at site 4 stand for?
+> **Topic for discussion**
+> What does the entry "0" in cell 2 at site 4 stand for?
+>
+> <details>
+    <summary>Answer</summary>
+> 
+> TODO
+>
+> </details>
 
 ## Setting up the analysis in BEAUti
 
@@ -128,7 +136,15 @@ To do so, click on one row and then press Ctrl+A, or Command+A on a Mac to selec
     <figcaption>Figure 6:</figcaption>
 </figure>
 
-TODO Q: When we link models like this, we’re essentially pooling information to estimate shared parameters. Can you identify which specific parameters are estimated jointly when we link the Clock Models and the Site Models, respectively?
+> **Topic for discussion**
+> When we link models like this, we’re essentially pooling information to estimate shared parameters. Can you identify which specific parameters are estimated jointly when we link the Clock Models and the Site Models, respectively?
+>
+> <details>
+    <summary>Answer</summary>
+> 
+> TODO
+>
+> </details>
 
 ### Specify the sampling times
 The data that we’ve loaded was sampled contemporaneously. We can therefore ignore the Tip Dates panel. When analyzing data where the samples were collected at very different times you’ll want to include those times in the analysis by modifying the contents of that panel.
@@ -148,7 +164,15 @@ You’ll also see the Silencing Rate parameter, which models the possibility tha
 </figure>
 
 
-TODO Q: Why do may we want to allow for variable edit rates?
+> **Topic for discussion**
+> Why may we want to allow for variable edit rates?
+>
+> <details>
+    <summary>Answer</summary>
+> 
+> TODO
+>
+> </details>
 
 ### Set the clock model
 Now, we move to the *Clock Model* tab. For this relatively short experiment, we assume that the rate of editing did not change. Thus, we keep the "Strict Clock".
@@ -160,8 +184,15 @@ Now, we move to the *Clock Model* tab. For this relatively short experiment, we 
     <figcaption>Figure 8:</figcaption>
 </figure>
 
-
-TODO Q: All our tips are sampled contemporaneously here. Why can we still estimate the clock rate?
+> **Topic for discussion**
+> All our tips are sampled contemporaneously here. Why can we still estimate the clock rate?
+>
+> <details>
+    <summary>Answer</summary>
+> 
+> TODO
+>
+> </details>
 
 ### Initialization
 Next, we come to the parameter initialization tab. Here, we will initialise the tree and experiment length for every alignment. This is also a great example of a step that’s much easier to edit directly in the XML file—consider this your gentle nudge to get comfortable with a bit of XML hacking! ;)
@@ -200,7 +231,16 @@ We'll start by choosing the phylodynamic model that describes how the trees were
 
 In BEAUti, you'll notice that a separate prior is defined for every tree. Since all colonies were grown under the same experimental conditions, we want them to share the same birth and death rate parameters. Unfortunately, BEAUti doesn’t currently support linking these priors directly through the interface. So we will first create an xml with separate parameters for each colony, and in a second step link the parameters by editing the XML and see how the runs compare.
 
-TODO Q: How do you expect the runs to differ?
+> **Topic for discussion**
+> 
+> How do you expect the runs to differ?
+>
+> <details>
+    <summary>Answer</summary>
+> 
+> TODO
+>
+> </details>
 
 <figure>
     <!--a id="fig:download"></a-->
