@@ -45,30 +45,6 @@ FigTree ([http://tree.bio.ed.ac.uk/software/figtree](http://tree.bio.ed.ac.uk/so
 
 ----
 
-# TiDeTree Installation
-
-TiDeTree can be easily installed via the BEAUti package manager. To do this, open BEAUti and go to the “File” menu and click on “Manage packages”:
-
-<figure>
-    <!--a id="fig:beauti"></a-->
-    <img style="width:80%;" src="figures/1-beauti.png">
-    <figcaption>Figure 1:</figcaption>
-</figure>
-
-
-Then scroll down, highlight the TiDeTree package and click on the “Install/Upgrade” button:
-
-<figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/2-download.png">
-    <figcaption>Figure 2:</figcaption>
-</figure>
-
-
-That’s it—TiDeTree is now ready to use! To ensure the package loads properly, restart BEAUti before continuing.
-
-
-
 # Practical: TiDeTree Tutorial
 
 In this tutorial, we will estimate editing rates and edit outcome probabilities, effective net growth rates using TiDeTree.
@@ -78,38 +54,39 @@ The aim is to:
 - Get to know how to choose the set-up of such an analysis
 - Learn how to read the output of a TiDeTree analysis
 
-## The Data
 
-In this tutorial, we’ll work with a dataset where a single mouse embryonic stem cell was grown in vitro for 54 hours to form a colony {% cite Chow2021 --file TiDeTree-Tutorial/master-refs %}. Actually, we have data from 106 such colonies! At the end of the experiment, a colony contains between 3 and 39 cells, and we have alignments for all of them. However, in this tutorial we will work with a subset of 10 colonies to keep our analysis manageable.
+## TiDeTree Installation
 
-To understand how the cells divide over time, each colony was lineage traced using the intMEMOIR system. This system uses a barcode made up of 10 target sites that are all unedited (state 0) at the start of the experiment. Each target site can be independently edited by a recombinase. The recombinase can either invert (state 1) or delete (state 2) a site. Thus, over the course of the experiment, cells acquire editing patterns that allow us to reconstruct their phylogeny. 
+TiDeTree can be easily installed via the BEAUti package manager. 
 
-<figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/3-data.png">
-    <figcaption>Figure 3:</figcaption>
-</figure>
-
-### Create the .tidetree input files
-Usually BEAST 2 expects an alignment of nucleotides as input. However, our alignment consists of integers, encoding the different editing outcomes (e.g. 0, 1 or 2). To still enable BEAUti to load our data, we have to create `.tidetree` files (which under the hood make BEAUti use an `AlignmentFromNexus` importer class that accepts integer values separated by commas).
-
-We provide [an R script](https://github.com/seidels/tidetree/tree/main/scripts) to convert standard `.csv` files into `.tidetree` files (in the NEXUS file format, which BEAUti understands). For this tutorial, we will work directly with the `.tidetree` files.
-
-<figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/4-alignment.png">
-    <figcaption>Figure 4: Exemplary data input file in .csv format, where every cell in the table shows the editing outcome at a specific target site (column) for a given cell (row).</figcaption>
-</figure>
-
-> **Topic for discussion**
-> What does the entry "0" in cell 2 at site 4 stand for?
->
-> <details>
-    <summary>Answer</summary>
+> Start **BEAUti** then open the **BEAST2 Package Manager** by navigating to **File > Manage Packages**.
 > 
-> TODO
->
-> </details>
+
+
+<figure>
+    <!--a id="fig:beauti"></a-->
+    <img style="width:80%;" src="figures/1-beauti.png">
+    <figcaption>Figure 1:</figcaption>
+</figure>
+
+
+> Then scroll down, highlight the **TiDeTree package** and click on the **Install/Upgrade** button.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/2-download.png">
+    <figcaption>Figure 2:</figcaption>
+</figure>
+
+> Close the **BEAST2 Package Manager** and _**restart**_ BEAUti to fully load the **TiDeTree** package.
+
+
+That’s it—TiDeTree is now ready to use! 
+
+
+
+
+
 
 ## Setting up the analysis in BEAUti
 
