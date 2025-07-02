@@ -249,7 +249,13 @@ Here's a snapshot of how your overall prior tab should now look like.
 
 ### MCMC
 
-Finally, set the **chain length** to `10^6` and the **sampling interval** to `10^3` under the *MCMC* tab. 
+Under the MCMC tab, set the **chain length** to `10^6` and the **sampling interval** to `10^3`. Additionally, make sure the tree logs are being written to separate files by renaming them separately for each alignment.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/16-log-trees-separate.png">
+    <figcaption>Figure 15: Specify distinct tree log file names.</figcaption>
+</figure>
 
 Once your analysis is fully set up, go to **File → Save**, navigate to your desired directory, and save the BEAST input file with a clear and descriptive name—e.g., `tidetree_tutorial.xml`.
 
