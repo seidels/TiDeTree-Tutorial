@@ -249,7 +249,7 @@ Here's a snapshot of how your overall prior tab should now look like.
 
 ### MCMC
 
-Under the MCMC tab, set the **chain length** to `10^6` and the **sampling interval** to `10^3`. Additionally, make sure the tree logs are being written to separate files by renaming them separately for each alignment.
+Under the MCMC tab, set the **chain length** to `5 * 10^6` and the **sampling interval** to `10^3`. Additionally, make sure the tree logs are being written to separate files by renaming them separately for each alignment.
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -269,8 +269,55 @@ Once your analysis is fully set up, go to **File → Save**, navigate to your de
 
  **Tip:** If BEAUti gives you trouble when generating the XML file and you’d like to proceed with the analysis right away, you can also download and use a pre-made XML file [link](https://github.com/seidels/TiDeTree-Tutorial/tree/master/precooked_runs/tutorial-unlinked-birth-death.xml).
 
-### 
+### Analyse the data
 
+> Load the tutorial-unlinked-birth-death.log file into Tracer to check mixing and the paramter estimates.
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/17-tracer.png">
+    <figcaption>Figure 16: Check convergence.</figcaption>
+</figure>
+
+The ESS value is above 200 for all parameter values and for the posterior and likelihoods.
+
+Let us take a look at the clock rate, the rate of introducing an edit at any position in the barcode.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/18-log-clock.png">
+    <figcaption>Figure 16: Estimated clock rate (edit rate) marginal posterior.</figcaption>
+</figure>
+
+We see that we estimate a median posterior rate of 0.015 edits per hour per site. Given that our experiment took 54 hours, this translates into 0.8 expected edits per site. 
+
+Let's now look at the estimated effective birth rates or cell population net growth rates.
+
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/20-unlinked-net-growth.png">
+    <figcaption>Figure 17: Estimated net growth marginal posteriors.</figcaption>
+</figure>
+
+We can see that most posterior medians fluctuate around 0.4 per hour, but the uncertainty around most growth rates is relatively large,  e.g. the 95\% highest posterior density (HPD) interval ranges from [7 e-3, 7e-2] for alignment 1.
+
+Let's compare this to the analysis where we linked the effective birth and death rates across the datasets by loading the "tutorial-linked-birth-death.log" file.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/20-unlinked-net-growth.png">
+    <figcaption>Figure 18: Estimated net growth marginal posteriors pooled across alignments.</figcaption>
+</figure>
+
+
+We can see that the uncertainty is reduced and that the HPD interval of the pooled rate is now [2 e-2, 6 e-2] which translates to 1-4 cell divisions. In the associated publication, they reported 3-5 cell divisions happening over the course of the experiment, which matches our findings, especially because we here report the effective birth rate (the growth rate after subtracting the death rate). Thus our reported rate is just a lower bound on the expected observed cell divisions.
+
+In summary, even though every individual dataset does not carry a strong signal on the parameters of interest, by pooling the parameters across datasets we are able to extract meaningful information from the data.
+
+
+## Tree log visualisation
+
+Next, we 
 
 
 ### TODOs
