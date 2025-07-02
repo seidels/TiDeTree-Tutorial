@@ -66,7 +66,7 @@ TiDeTree can be easily installed via the BEAUti package manager.
 <figure>
     <!--a id="fig:beauti"></a-->
     <img style="width:80%;" src="figures/1-beauti.png">
-    <figcaption>Figure 1:</figcaption>
+    <figcaption>Figure 1: Finding the BEAST2 Package Manager </figcaption>
 </figure>
 
 
@@ -75,7 +75,7 @@ TiDeTree can be easily installed via the BEAUti package manager.
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/2-download.png">
-    <figcaption>Figure 2:</figcaption>
+    <figcaption>Figure 2:  Installing TiDeTree via the Package Manager</figcaption>
 </figure>
 
 > Close the **BEAST2 Package Manager** and _**restart**_ BEAUti to fully load the **TiDeTree** package.
@@ -98,7 +98,7 @@ To load the data, select **File > Add Alignment** and navigate to the directory 
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/5-dat-in-beauti.png">
-    <figcaption>Figure 5:</figcaption>
+    <figcaption>Figure 3: Importing the alignments into BEAUTI. </figcaption>
 </figure>
 
 Now you should see 10 new records—one for each alignment—listed in BEAUti. By default, BEAUti treats each dataset independently, assigning separate site, clock, and tree models to each one. However, since all our data was generated under the same experimental conditions, it makes sense to assume that the editing process was governed by the same parameters across datasets.
@@ -110,7 +110,7 @@ To do so, click on one row and then press Ctrl+A, or Command+A on a Mac to selec
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/6-linked-models.png">
-    <figcaption>Figure 6:</figcaption>
+    <figcaption>Figure 4: Linked clock and site models.</figcaption>
 </figure>
 
 > **Topic for discussion**
@@ -124,7 +124,7 @@ The data that we’ve loaded was sampled contemporaneously and we do not need to
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/7-2-tip-dates.png">
-    <figcaption>Figure 7: Tip dates panel setup</figcaption>
+    <figcaption>Figure 5: Tip dates panel setup</figcaption>
 </figure>
 
 
@@ -140,7 +140,7 @@ You’ll also see the Silencing Rate parameter, which models the possibility tha
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/7-substmodel.png">
-    <figcaption>Figure 7:</figcaption>
+    <figcaption>Figure 6: Specifying the substitution model.</figcaption>
 </figure>
 
 
@@ -155,7 +155,7 @@ Now, we move to the *Clock Model* tab. For this relatively short experiment, we 
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/8-clock.png">
-    <figcaption>Figure 8:</figcaption>
+    <figcaption>Figure 7: Specifying the site model.</figcaption>
 </figure>
 
 > **Topic for discussion**
@@ -171,7 +171,7 @@ So, go ahead and set the root height, editing height, and editing duration to 53
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/9-init-tree.png">
-    <figcaption>Figure 9:</figcaption>
+    <figcaption>Figure 8: Initialise the starting tree.</figcaption>
 </figure>
 
 Further, we will set every experiment length to 54 hours and uncheck the "estimate" mark because we do not want to estimate it.
@@ -179,7 +179,7 @@ Further, we will set every experiment length to 54 hours and uncheck the "estima
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/10-init-experiment-length.png">
-    <figcaption>Figure 10:</figcaption>
+    <figcaption>Figure 9: Set the experiment duration.</figcaption>
 </figure>
 
 Finally, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution we will set up next.
@@ -187,7 +187,7 @@ Finally, we also want to set the initial value of the effective birth rate to 0.
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/11-init-birth-rate.png">
-    <figcaption>Figure 11:</figcaption>
+    <figcaption>Figure 10: Set the </figcaption>
 </figure>
 
 ### Set priors
@@ -214,7 +214,7 @@ So, for each alignment, we pick "Birth-death model" from the drop-down menu. The
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/10-birth-rate.png">
-    <figcaption>Figure 13:</figcaption>
+    <figcaption>Figure 10: Specify the prior on the effective birth rate. </figcaption>
 </figure>
 
 
@@ -223,7 +223,7 @@ Additionally, we place a Uniform prior over [0, 1] on the relative death rate or
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/11-death-rate.png">
-    <figcaption>Figure 14:</figcaption>
+    <figcaption>Figure 11: Specify the prior on the relative death rate.</figcaption>
 </figure>
 
 
@@ -232,7 +232,7 @@ Then we place a lognormal prior with mean -5 and sd 1 on the clock rate, which t
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/12-prior-clock.png">
-    <figcaption>Figure 15:</figcaption>
+    <figcaption>Figure 12: Specify the prior on the clock rate.</figcaption>
 </figure>
 
 Here's a snapshot of how your overall prior tab should now look like.
@@ -240,7 +240,7 @@ Here's a snapshot of how your overall prior tab should now look like.
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/12-overall-priors.png">
-    <figcaption>Figure 16:</figcaption>
+    <figcaption>Figure 13: Specify the prior on the edit probabilities.</figcaption>
 </figure>
 
 
@@ -254,7 +254,7 @@ Once your analysis is fully set up, go to **File → Save**, navigate to your de
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/15-MCMC.png">
-    <figcaption>Figure 17:</figcaption>
+    <figcaption>Figure 14: MCMC setup.</figcaption>
 </figure>
 
 
