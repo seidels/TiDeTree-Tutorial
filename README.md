@@ -90,10 +90,10 @@ That’s it—TiDeTree is now ready to use!
 
 ## Setting up the analysis in BEAUti
 
-At the start, we load the TiDeTree template by selecting File -> Template -> tidetree.
+At the start, we load the TiDeTree template by selecting **File > Template > tidetree**.
 
 ### Loading sequence data
-To load the data, select File->Add Alignment and navigate to the directory containing the tutorial data. This directory contains 10 `.tidetree` files, each containing the data for a colony. Since the directory contains only these files and nothing else, we can select them all simply using Ctrl+A (or Command+A on a Mac) and then press "Open".
+To load the data, select **File > Add Alignment** and navigate to the directory containing the tutorial data. This directory contains 10 `.tidetree` files, each containing the data for a colony. Since the directory contains only these files and nothing else, we can select them all simply using Ctrl+A (or Command+A on a Mac) and then press "Open".
 
 <figure>
     <!--a id="fig:download"></a-->
