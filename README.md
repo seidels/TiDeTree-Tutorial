@@ -119,7 +119,15 @@ To do so, click on one row and then press Ctrl+A, or Command+A on a Mac to selec
 
 
 ### Specify the sampling times
-The data that we’ve loaded was sampled contemporaneously. We can therefore ignore the Tip Dates panel. When analyzing data where the samples were collected at very different times you’ll want to include those times in the analysis by modifying the contents of that panel.
+The data that we’ve loaded was sampled contemporaneously and we do not need to specify the sampling times per se. However, in order to estimate the clock rate, we have to specify them as "Use tip dates" and select the dates as "Since some time in the past". 
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/7-2-tip-dates.png">
+    <figcaption>Figure 7: Tip dates panel setup</figcaption>
+</figure>
+
+
 
 
 ### Specify the Site Model
