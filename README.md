@@ -182,13 +182,7 @@ Further, we will set every experiment length to 54 hours and uncheck the "estima
     <figcaption>Figure 9: Set the experiment duration.</figcaption>
 </figure>
 
-Finally, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution we will set up next.
 
-<figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/11-init-birth-rate.png">
-    <figcaption>Figure 10: Set the </figcaption>
-</figure>
 
 ### Set priors
 Now, we want to set the priors for the parameters of our model under the *Priors* tab.
@@ -216,6 +210,15 @@ So, for each alignment, we pick "Birth-death model" from the drop-down menu. The
     <img style="width:80%;" src="figures/10-birth-rate.png">
     <figcaption>Figure 10: Specify the prior on the effective birth rate. </figcaption>
 </figure>
+
+Additionall, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution just set. So select "initial" and set "Value" to 0.05.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/11-init-birth-rate.png">
+    <figcaption>Figure 11: Set initial value for the effective birth rate.</figcaption>
+</figure>
+
 
 
 Additionally, we place a Uniform prior over [0, 1] on the relative death rate or cell turnover (death rate / birth rate), stating that we expect the birth rate to be larger than the death rate.
