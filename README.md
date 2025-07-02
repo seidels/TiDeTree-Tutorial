@@ -117,9 +117,9 @@ To do so, click on one row and then press Ctrl+A, or Command+A on a Mac to selec
 > When we link models like this, we’re essentially pooling information to estimate shared parameters. Can you identify which specific parameters are estimated jointly when we link the Clock Models and the Site Models, respectively?
 >
 > <details>
-    <summary>Answer</summary>
+    <summary>The clock (or editing) rate and the edit probabilities</summary>
 > 
-> TODO
+>
 >
 > </details>
 
@@ -145,10 +145,7 @@ You’ll also see the Silencing Rate parameter, which models the possibility tha
 > Why may we want to allow for variable edit rates?
 >
 > <details>
-    <summary>Answer</summary>
-> 
-> TODO
->
+    <summary>We may want to allow edit rates to vary for every datasetif if we expect that experimental conditions are different enough to lead to different clock rates. Another option is to allow the clock rates for every site to vary for instance if we expect that the genomic context has a large influence on the clock rate and differs for the sites. </summary>
 > </details>
 
 ### Set the clock model
@@ -165,10 +162,8 @@ Now, we move to the *Clock Model* tab. For this relatively short experiment, we 
 > All our tips are sampled contemporaneously here. Why can we still estimate the clock rate?
 >
 > <details>
-    <summary>Answer</summary>
-> 
-> TODO
->
+    <summary> We can estimate the clock rate because we fix the duration of the experiment which serves as our temporal calibration.
+    </summary>
 > </details>
 
 ### Initialization
@@ -284,8 +279,6 @@ Once your analysis is fully set up, go to **File → Save**, navigate to your de
 Add starting tree class with edit height
 add clock priors
 add silencing rate plus prior, operator etc.
-set origin
-Make sure the correct number of edit probabilities is appearing and the Sci Phy Substmodel is changed in BEAUTI!!
 
 ----
 
