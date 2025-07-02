@@ -116,12 +116,7 @@ To do so, click on one row and then press Ctrl+A, or Command+A on a Mac to selec
 > **Topic for discussion**
 > When we link models like this, we’re essentially pooling information to estimate shared parameters. Can you identify which specific parameters are estimated jointly when we link the Clock Models and the Site Models, respectively?
 >
-> <details>
-    <summary>The clock (or editing) rate and the edit probabilities</summary>
-> 
->
->
-> </details>
+
 
 ### Specify the sampling times
 The data that we’ve loaded was sampled contemporaneously. We can therefore ignore the Tip Dates panel. When analyzing data where the samples were collected at very different times you’ll want to include those times in the analysis by modifying the contents of that panel.
@@ -142,11 +137,8 @@ You’ll also see the Silencing Rate parameter, which models the possibility tha
 
 
 > **Topic for discussion**
-> Why may we want to allow for variable edit rates?
->
-> <details>
-    <summary>We may want to allow edit rates to vary for every datasetif if we expect that experimental conditions are different enough to lead to different clock rates. Another option is to allow the clock rates for every site to vary for instance if we expect that the genomic context has a large influence on the clock rate and differs for the sites. </summary>
-> </details>
+> Do we want to allow for variable edit rates? Why or why not?
+
 
 ### Set the clock model
 Now, we move to the *Clock Model* tab. For this relatively short experiment, we assume that the rate of editing did not change. Thus, we keep the "Strict Clock".
@@ -160,11 +152,6 @@ Now, we move to the *Clock Model* tab. For this relatively short experiment, we 
 
 > **Topic for discussion**
 > All our tips are sampled contemporaneously here. Why can we still estimate the clock rate?
->
-> <details>
-    <summary> We can estimate the clock rate because we fix the duration of the experiment which serves as our temporal calibration.
-    </summary>
-> </details>
 
 ### Initialization
 Next, we come to the parameter initialization tab. Here, we will initialise the tree and experiment length for every alignment. This is also a great example of a step that’s much easier to edit directly in the XML file—consider this your gentle nudge to get comfortable with a bit of XML hacking! ;)
@@ -207,12 +194,6 @@ In BEAUti, you'll notice that a separate prior is defined for every tree. Since 
 > 
 > How do you expect the runs to differ?
 >
-> <details>
-    <summary>Answer</summary>
-> 
-> TODO
->
-> </details>
 
 <figure>
     <!--a id="fig:download"></a-->
