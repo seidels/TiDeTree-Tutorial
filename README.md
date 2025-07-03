@@ -271,16 +271,19 @@ Once your analysis is fully set up, go to **File → Save**, navigate to your de
 
 ### Analyse the data
 
-> Load the tutorial-unlinked-birth-death.log file into Tracer to check mixing and the paramter estimates.
+> Load the tutorial-unlinked-birth-death.log file into Tracer to assess mixing and the paramter estimates.
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/17-tracer.png">
     <figcaption>Figure 16: Check convergence.</figcaption>
 </figure>
 
-The ESS value is above 200 for all parameter values and for the posterior and likelihoods.
+All parameters, including the posterior and likelihood, show effective sample sizes (ESS) above 200, indicating good mixing.
 
-Let us take a look at the clock rate, the rate of introducing an edit at any position in the barcode.
+
+Let's inspect the estimated clock rate, representing the rate of introducing an edit at any site in the barcode.
+
+> In Tracer, select **clockRate** and then click on **Marginal Density**.
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -288,10 +291,11 @@ Let us take a look at the clock rate, the rate of introducing an edit at any pos
     <figcaption>Figure 16: Estimated clock rate (edit rate) marginal posterior.</figcaption>
 </figure>
 
-We see that we estimate a median posterior rate of 0.015 edits per hour per site. Given that our experiment took 54 hours, this translates into 0.8 expected edits per site. 
+We see that the estimated median posterior rate is 0.015 edits per site per hour. Over the 54-hour experiment, this corresponds to 0.8 expected edits per site. 
 
-Let's now look at the estimated effective birth rates or cell population net growth rates.
+Now, let's examine the  **effective birth rates**  (net growth rates) per dataset.
 
+> Select **BDBirthRate[1-10]** and then click on **Estimates**.
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -299,9 +303,27 @@ Let's now look at the estimated effective birth rates or cell population net gro
     <figcaption>Figure 17: Estimated net growth marginal posteriors.</figcaption>
 </figure>
 
-We can see that most posterior medians fluctuate around 0.4 per hour, but the uncertainty around most growth rates is relatively large,  e.g. the 95\% highest posterior density (HPD) interval ranges from [7 e-3, 7e-2] for alignment 1.
+Most median estimates fluctuate around 0.04/hour, but the uncertainty is high—for example, the 95%highest posterior density (HPD) interval for alignment 1 ranges from [0.007 to 0.07].
 
-Let's compare this to the analysis where we linked the effective birth and death rates across the datasets by loading the "tutorial-linked-birth-death.log" file.
+Next, we compare this to the **linked** analysis, where birth and death rates are shared across datasets. We have already prepared the xml and log for you. The key difference is that in our *unlinked* analysis, we estimated a separate birth and death rate for every dataset in every tree prior. In the *linked analysis*, we reference the same birth and death rates across tree priors, essentially pooling them across datasets which we show in the image below.
+*(Note: The unlinked analysis requires additional changes to the the XML, e.g., removing now-unnecessary parameter states, which we will not detail here. You’re welcome to explore the differences between the linked and unlinked XML files.)*
+
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/24-create-linked-xml.png">
+    <figcaption>Figure 18: XML hacking to pool birth and death rates across datasets.</figcaption>
+</figure>
+
+
+
+
+> Run the pre-made [XML file](https://github.com/seidels/TiDeTree-Tutorial/tree/master/precooked_runs/tutorial-linked-birth-death.xml) or directly load the pre-cooked [log](https://github.com/seidels/TiDeTree-Tutorial/tree/master/precooked_runs/tutorial-linked-birth-death.log) into Tracer.
+
+We can see that all ESS values are above 200 and that the Traces look well mixed, indicating convergence.
+
+Let us now check the estimated net growth rates.
+> Click on BDBirthRate and the Maringal Density Tab.
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -309,21 +331,69 @@ Let's compare this to the analysis where we linked the effective birth and death
     <figcaption>Figure 18: Estimated net growth marginal posteriors pooled across alignments.</figcaption>
 </figure>
 
+We observe that the uncertainty is reduced, and the 95% HPD interval for the pooled **effective birth rate** is now **[0.02, 0.06]**, which corresponds to **at least 1–4 cell divisions** over the course of the experiment. The *“at least”* reflects that the effective birth rate equals the birth rate minus the death rate, providing a **lower bound** on the total number of divisions. This estimate is consistent with the original publication’s reported range of **3–5 divisions**.
 
-We can see that the uncertainty is reduced and that the HPD interval of the pooled rate is now [2 e-2, 6 e-2] which translates to 1-4 cell divisions. In the associated publication, they reported 3-5 cell divisions happening over the course of the experiment, which matches our findings, especially because we here report the effective birth rate (the growth rate after subtracting the death rate). Thus our reported rate is just a lower bound on the expected observed cell divisions.
 
-In summary, even though every individual dataset does not carry a strong signal on the parameters of interest, by pooling the parameters across datasets we are able to extract meaningful information from the data.
+We can see that the uncertainty is reduced and that the 95% HPD interval offor the pooled, effective birth rate rate is now [0.02, 0.06], which translates to **at least 1-4 cell divisions** over the course of the experiment. The *at least* is reflects that the effective birth rate equals the birth rate minus the death rate, which can help us get a lower bound on the number of expected cell divisions. This estimate aligns well with the original publication's estimate of 3-5 divisions over the experiment. 
+
+In summary, even though the individual dataset carried limited signal, pooling parameters across alignments allows us to  extract biologically meaningful estimates with reduced uncertainty.
 
 
 ## Tree log visualisation
 
-Next, we 
+Next, we want to visualise the trees. Be aware that how much sense it makes to look at the trees depends on the dataset and there very much on the number of sites that are used to trace lineage and how large the tree is that you are trying to estimate (the general data points vs number of parameters question). Remember, in every dataset here we have 10 sites, which is a much lower signal compared to thousands of sites used on applications in epidemiology or macroevolution.
 
+Let us pick dataset 1 to visualuse which has 9 cells. To appreciate how much uncertainty there is in the tree structure, lets plot the tree posterior in Densitree.
 
-### TODOs
-Add starting tree class with edit height
-add clock priors
-add silencing rate plus prior, operator etc.
+> Open DensiTree and load the file tutorial-linked-birth-death.1.trees
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/23-linked-trees-1-densitree.png">
+    <figcaption>Figure 18: Posterior distribution of trees.</figcaption>
+</figure>
+
+You can see that the cherry for cells 6 and 7 is well supported whereas the hierarcy among cells 0-3 has multiple consensus trees that can explain the data.
+
+To summarise the posterior trees, we will use TreeAnnotator and generate two point estimates as you have seen in other tutorials, the maximum clade credibility tree (MCC) and the tree based on the conditional clade distribution (CCD). **To save time, you may run just one method and compare it to the other using the example below.**
+
+## Generating the MCC tree
+
+> Open **TreeAnnotator** and then set the options as in Fig .. below. You have to specify the **Burning percentage**, **Target tree type, Node heights, Input Tree File** and the **Output File**. Click **Run** to start the program.
+
+<figure>
+    <!--a id="fig:ta-mcc"></a-->
+    <img style="width:80%;" src="figures/25-ta-mcc.png">
+    <figcaption>Figure 18: TreeAnnotator settings for MCC tree.</figcaption>
+</figure>
+
+## Generating the CCD tree
+
+> Open **TreeAnnotator** and then set the options as in Fig .. below. Compared to generting the MCC tree you only have to change the **Target tree type** and the name of the  **Output file**. All other options remain the same. Click **Run** to start the program.
+
+<figure>
+    <!--a id="fig:ta-ccd"></a-->
+    <img style="width:80%;" src="figures/26-ta-ccd.png">
+    <figcaption>Figure 18: TreeAnnotator settings for CCD tree.</figcaption>
+</figure>
+
+## Analyse the summary trees
+
+> Open **FigTree** and load your chosen summary tree.
+>
+> On the left hand menu, select **Node Labels* and choose to display the **posterior** support at the internal nodes. Increase the Font size until the labels are clearly visible.
+
+> Further, select **Node Bars** and display **height_95%_HPD** to display the 95% HPD for the node heights.
+>
+
+<figure>
+    <!--a id="fig:ta-ccd"></a-->
+    <img style="width:80%;" src="figures/27-figtree-ccd.png">
+    <figcaption>Figure 18: TreeAnnotator settings for CCD tree.</figcaption>
+</figure>
+
+> **Topic for discussion** How do the posterior node labels compare to the observations we made when analysing the tree posterior in DensiTree?
+
 
 ----
 
