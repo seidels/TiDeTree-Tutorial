@@ -365,7 +365,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
 
 ## Generating the MCC tree
 
-> Open **TreeAnnotator** and then set the options as in Fig .. below. You have to specify the **Burning percentage**, **Target tree type, Node heights, Input Tree File** and the **Output File**. Click **Run** to start the program.
+> Open **TreeAnnotator** and then set the options as in Fig. 22 below. You have to specify the **Burning percentage**, **Target tree type, Node heights, Input Tree File** and the **Output File**. Click **Run** to start the program.
 
 <figure>
     <!--a id="fig:ta-mcc"></a-->
@@ -375,7 +375,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
 
 ## Generating the CCD tree
 
-> Open **TreeAnnotator** and then set the options as in Fig .. below. Compared to generting the MCC tree you only have to change the **Target tree type** and the name of the  **Output file**. All other options remain the same. Click **Run** to start the program.
+> Open **TreeAnnotator** and then set the options as in Fig. 23 below. Compared to generting the MCC tree you only have to change the **Target tree type** and the name of the  **Output file**. All other options remain the same. Click **Run** to start the program.
 
 <figure>
     <!--a id="fig:ta-ccd"></a-->
