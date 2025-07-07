@@ -94,7 +94,7 @@ To understand how the cells divide over time, each colony was lineage traced usi
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/3-data.png">
-    <figcaption> Fig 3: Setup if intMEMOIR for lineage tracing in stem cells. From </figcaption>
+    <figcaption> Fig 3: Setup if intMEMOIR for lineage tracing in stem cells. Adapted from {% cite GONG202181 --file TiDeTree-Tutorial/master-refs %}.</figcaption>
 </figure>
 
 ### Create the .tidetree input files
@@ -108,7 +108,8 @@ We provide [a script](https://github.com/seidels/tidetree/tree/main/scripts) to 
     <figcaption>Exemplary data input file in csv format, where every cell in the table shows the editing outcome at a specific target site (column) for a given cell (row).</figcaption>
 </figure>
 
-TODO Q: What does the entry "0" in cell 2 at site 4 stand for?
+> **Topic for discussion**
+> What does the entry "0" in cell 1 at site 3 stand for?
 
 
 
