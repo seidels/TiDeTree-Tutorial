@@ -339,10 +339,8 @@ Let us now check the estimated net growth rates.
     <figcaption>Figure 20: Estimated net growth marginal posteriors pooled across alignments.</figcaption>
 </figure>
 
-We observe that the uncertainty is reduced, and the 95% HPD interval for the pooled **effective birth rate** is now **[0.02, 0.06]**, which corresponds to **at least 1–4 cell divisions** over the course of the experiment. The *“at least”* reflects that the effective birth rate equals the birth rate minus the death rate, providing a **lower bound** on the total number of divisions. This estimate is consistent with the original publication’s reported range of **3–5 divisions**.
+We observe that the uncertainty is reduced, and the 95% HPD interval for the pooled **effective birth rate** is now **[0.02, 0.06]**, which corresponds to **at least 1–4 cell divisions** over the course of the experiment. The *“at least”* reflects that the effective birth rate equals the birth rate minus the death rate, providing a **lower bound** on the total number of divisions. This estimate aligns well with the original publication’s reported range of **3–5 divisions**.
 
-
-We can see that the uncertainty is reduced and that the 95% HPD interval offor the pooled, effective birth rate rate is now [0.02, 0.06], which translates to **at least 1-4 cell divisions** over the course of the experiment. The *at least* is reflects that the effective birth rate equals the birth rate minus the death rate, which can help us get a lower bound on the number of expected cell divisions. This estimate aligns well with the original publication's estimate of 3-5 divisions over the experiment. 
 
 In summary, even though the individual dataset carried limited signal, pooling parameters across alignments allows us to  extract biologically meaningful estimates with reduced uncertainty.
 
