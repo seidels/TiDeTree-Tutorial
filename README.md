@@ -271,7 +271,7 @@ Once your analysis is fully set up, go to **File → Save**, navigate to your de
 
 ### Analyse the data
 
-> Load the tutorial-unlinked-birth-death.log file into Tracer to assess mixing and the paramter estimates.
+> Load the tutorial-unlinked-birth-death.log file into Tracer to assess mixing and the parameter estimates.
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/17-tracer.png">
