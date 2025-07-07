@@ -275,7 +275,7 @@ Once your analysis is fully set up, go to **File → Save**, navigate to your de
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/17-tracer.png">
-    <figcaption>Figure 16: Check convergence.</figcaption>
+    <figcaption>Figure 15: Check convergence.</figcaption>
 </figure>
 
 All parameters, including the posterior and likelihood, show effective sample sizes (ESS) above 200, indicating good mixing.
@@ -303,7 +303,7 @@ Now, let's examine the  **effective birth rates**  (net growth rates) per datase
     <figcaption>Figure 17: Estimated net growth marginal posteriors.</figcaption>
 </figure>
 
-Most median estimates fluctuate around 0.04/hour, but the uncertainty is high—for example, the 95%highest posterior density (HPD) interval for alignment 1 ranges from [0.007 to 0.07].
+Most median estimates fluctuate around 0.04/hour, but the uncertainty is high—for example, the 95% highest posterior density (HPD) interval for alignment 1 ranges from [0.007 to 0.07].
 
 Next, we compare this to the **linked** analysis, where birth and death rates are shared across datasets. We have already prepared the xml and log for you. The key difference is that in our *unlinked* analysis, we estimated a separate birth and death rate for every dataset in every tree prior. In the *linked analysis*, we reference the same birth and death rates across tree priors, essentially pooling them across datasets which we show in the image below.
 *(Note: The unlinked analysis requires additional changes to the the XML, e.g., removing now-unnecessary parameter states, which we will not detail here. You’re welcome to explore the differences between the linked and unlinked XML files.)*
@@ -322,13 +322,21 @@ Next, we compare this to the **linked** analysis, where birth and death rates ar
 
 We can see that all ESS values are above 200 and that the Traces look well mixed, indicating convergence.
 
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/28-linked-traces.png">
+    <figcaption>Figure 19: Check convergence.</figcaption>
+</figure>
+
+
 Let us now check the estimated net growth rates.
 > Click on BDBirthRate and the Maringal Density Tab.
 
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/20-unlinked-net-growth.png">
-    <figcaption>Figure 18: Estimated net growth marginal posteriors pooled across alignments.</figcaption>
+    <figcaption>Figure 20: Estimated net growth marginal posteriors pooled across alignments.</figcaption>
 </figure>
 
 We observe that the uncertainty is reduced, and the 95% HPD interval for the pooled **effective birth rate** is now **[0.02, 0.06]**, which corresponds to **at least 1–4 cell divisions** over the course of the experiment. The *“at least”* reflects that the effective birth rate equals the birth rate minus the death rate, providing a **lower bound** on the total number of divisions. This estimate is consistent with the original publication’s reported range of **3–5 divisions**.
@@ -350,7 +358,7 @@ Let us pick dataset 1 to visualuse which has 9 cells. To appreciate how much unc
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/23-linked-trees-1-densitree.png">
-    <figcaption>Figure 18: Posterior distribution of trees.</figcaption>
+    <figcaption>Figure 21: Posterior distribution of trees.</figcaption>
 </figure>
 
 You can see that the cherry for cells 6 and 7 is well supported whereas the hierarcy among cells 0-3 has multiple consensus trees that can explain the data.
@@ -364,7 +372,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
 <figure>
     <!--a id="fig:ta-mcc"></a-->
     <img style="width:80%;" src="figures/25-ta-mcc.png">
-    <figcaption>Figure 18: TreeAnnotator settings for MCC tree.</figcaption>
+    <figcaption>Figure 22: TreeAnnotator settings for MCC tree.</figcaption>
 </figure>
 
 ## Generating the CCD tree
@@ -374,7 +382,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
 <figure>
     <!--a id="fig:ta-ccd"></a-->
     <img style="width:80%;" src="figures/26-ta-ccd.png">
-    <figcaption>Figure 18: TreeAnnotator settings for CCD tree.</figcaption>
+    <figcaption>Figure 23: TreeAnnotator settings for CCD tree.</figcaption>
 </figure>
 
 ## Analyse the summary trees
@@ -389,7 +397,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
 <figure>
     <!--a id="fig:ta-ccd"></a-->
     <img style="width:80%;" src="figures/27-figtree-ccd.png">
-    <figcaption>Figure 18: TreeAnnotator settings for CCD tree.</figcaption>
+    <figcaption>Figure 24: TreeAnnotator settings for CCD tree.</figcaption>
 </figure>
 
 > **Topic for discussion** How do the posterior node labels compare to the observations we made when analysing the tree posterior in DensiTree?
