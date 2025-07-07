@@ -85,6 +85,30 @@ That’s it—TiDeTree is now ready to use!
 
 
 
+## The Data
+
+In this tutorial, we’ll work with a dataset where a single mouse embryonic stem cell was grown in vitro for 54 hours to form a colony {% cite Chow2021 --file TiDeTree-Tutorial/master-refs %}. Actually, we have data from 106 such colonies! At the end of the experiment, a colony contains between 3 and 39 cells, and we have alignments for all of them. However, in this tutorial we will work with a subset of 10 colonies to keep our analysis manageable.
+
+To understand how the cells divide over time, each colony was lineage traced using the intMEMOIR system. This system uses a barcode made up of 10 target sites that are all unedited (state 0) at the start of the experiment. Each target site can be independently edited by a recombinase. The recombinase can either invert (state 1) or delete (state 2) a site. Thus, over the course of the experiment, cell can acquire editing patterns that allow us to reconstruct their phylogeny. 
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/3-data.png">
+    <figcaption> Fig 3: Setup if intMEMOIR for lineage tracing in stem cells. From </figcaption>
+</figure>
+
+### Create the .tidetree input files
+Usually BEAST 2 expects an alignment of nucleotides as input. However, our alignment consists of integers, encoding the different editing outcomes (e.g. 0, 1 or 2). To still enable BEAUti to load our data, we have to create .tidetree files (which under the hood make BEAUti use an AlignmentFromNexus importer class that accepts integer values separated by commas).
+
+We provide [a script](https://github.com/seidels/tidetree/tree/main/scripts) to convert standard .csv files into .tidetree files (in NEXUS format). For this tutorial, we will work directly with the .tidetree files.
+
+<figure>
+    <!--a id="fig:download"></a-->
+    <img style="width:80%;" src="figures/4-alignment.png">
+    <figcaption>Exemplary data input file in csv format, where every cell in the table shows the editing outcome at a specific target site (column) for a given cell (row).</figcaption>
+</figure>
+
+TODO Q: What does the entry "0" in cell 2 at site 4 stand for?
 
 
 
