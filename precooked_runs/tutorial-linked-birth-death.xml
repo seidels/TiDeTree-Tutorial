@@ -192,7 +192,7 @@ name="taxa">
 
     <map name="OneOnX" >beast.base.inference.distribution.OneOnX</map>
 
-    <run id="mcmc" spec="MCMC" chainLength="5000000" storeEvery="1000">
+    <run id="mcmc" spec="MCMC" chainLength="10000000" storeEvery="1000">
         <state id="state" spec="State" storeEvery="1000">
             <stateNode id="Tree.t:alignment_7" spec="tidetree.tree.StartingTree" sequencesAreClustered="false">
                 <taxa idref="alignment_7"/>
