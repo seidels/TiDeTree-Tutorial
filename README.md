@@ -94,7 +94,7 @@ To understand how the cells divide over time, each colony was lineage traced usi
 <figure>
     <!--a id="fig:download"></a-->
     <img style="width:80%;" src="figures/3-data.png">
-    <figcaption> Fig 3: Setup if intMEMOIR for lineage tracing in stem cells. Adapted from {% cite GONG202181 --file TiDeTree-Tutorial/master-refs %}.</figcaption>
+    <figcaption> Fig 3: Setup of intMEMOIR for lineage tracing in stem cells. Adapted from {% cite GONG202181 --file TiDeTree-Tutorial/master-refs %}.</figcaption>
 </figure>
 
 ### Create the .tidetree input files
