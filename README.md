@@ -5,7 +5,10 @@ level: Intermediate
 title: TiDeTree Tutorial
 subtitle: Reconstructing time-scaled single-cell phylogenies from genetic lineage tracing data
 beastversion: ">= 2.7"
+tracerversion: 1.7.x
+figtreeversion: 1.4.x
 ---
+
 
 # Background
 
@@ -21,7 +24,7 @@ This tutorial will guide you through the setup and application of TiDeTree using
 
 ### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees 2
 
-BEAST2 ([http://www.beast2.org](http://www.beast2.org)) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v{{ page.beastversion }} {% cite BEAST2book2014 --file TiDeTree-Tutorial/master-refs %}.
+BEAST2 ([http://www.beast2.org](http://www.beast2.org)) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v{{ page.beastversion }} {% cite Bouckaert2014 Bouckaert2019 --file TiDeTree-Tutorial/master-refs %}.
 
 ### BEAUti2 - Bayesian Evolutionary Analysis Utility
 
@@ -47,7 +50,7 @@ FigTree ([http://tree.bio.ed.ac.uk/software/figtree](http://tree.bio.ed.ac.uk/so
 
 # Practical: TiDeTree Tutorial
 
-In this tutorial, we will estimate editing rates and edit outcome probabilities, effective net growth rates using TiDeTree.
+In this tutorial, we will estimate editing rates and edit outcome probabilities, as well as effective net growth rates using TiDeTree.
 
 The aim is to:
 - Learn how to infer time-scaled trees from single-cell lineage recording data
@@ -61,21 +64,12 @@ TiDeTree can be easily installed via the BEAUti package manager.
 
 > Start **BEAUti** then open the **BEAST2 Package Manager** by navigating to **File > Manage Packages**.
 > 
-
-
-<figure>
-    <!--a id="fig:beauti"></a-->
-    <img style="width:80%;" src="figures/1-beauti.png">
-    <figcaption>Figure 1: Finding the BEAST2 Package Manager </figcaption>
-</figure>
-
-
-> Then scroll down, highlight the **TiDeTree package** and click on the **Install/Upgrade** button.
+> Then scroll down, highlight the **TiDeTree package** and click on the **Install/Upgrade** button ([Figure 1](#fig:download)).
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/2-download.png">
-    <figcaption>Figure 2:  Installing TiDeTree via the Package Manager</figcaption>
+    <a id="fig:download"></a>
+    <img style="width:100%;" src="figures/2-download.png">
+    <figcaption>Figure 1:  Installing TiDeTree via the Package Manager</figcaption>
 </figure>
 
 > Close the **BEAST2 Package Manager** and _**restart**_ BEAUti to fully load the **TiDeTree** package.
@@ -89,62 +83,78 @@ That’s it—TiDeTree is now ready to use!
 
 In this tutorial, we’ll work with a dataset where a single mouse embryonic stem cell was grown in vitro for 54 hours to form a colony {% cite Chow2021 --file TiDeTree-Tutorial/master-refs %}. Actually, we have data from 106 such colonies! At the end of the experiment, a colony contains between 3 and 39 cells, and we have alignments for all of them. However, in this tutorial we will work with a subset of 10 colonies to keep our analysis manageable.
 
-To understand how the cells divide over time, each colony was lineage traced using the intMEMOIR system. This system uses a barcode made up of 10 target sites that are all unedited (state 0) at the start of the experiment. Each target site can be independently edited by a recombinase. The recombinase can either invert (state 1) or delete (state 2) a site. Thus, over the course of the experiment, cell can acquire editing patterns that allow us to reconstruct their phylogeny. 
+To understand how the cells divide over time, each colony was lineage traced using the intMEMOIR system. This system uses a barcode made up of 10 target sites that are all unedited (state 0) at the start of the experiment. Each target site can be independently edited by a recombinase. The recombinase can either invert (state 1) or delete (state 2) a site. Thus, over the course of the experiment, cells can acquire editing patterns that allow us to reconstruct their phylogeny ([Figure 2](#fig:intMEMOIR)). 
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/3-data.png">
-    <figcaption> Fig 3: Setup of intMEMOIR for lineage tracing in stem cells. Adapted from {% cite GONG202181 --file TiDeTree-Tutorial/master-refs %}.</figcaption>
+    <a id="fig:intMEMOIR"></a>
+    <img style="width:100%;" src="figures/3-data.png">
+    <figcaption> Figure 2: Setup of intMEMOIR for lineage tracing in stem cells. Adapted from {% cite GONG2021 --file TiDeTree-Tutorial/master-refs %}.</figcaption>
 </figure>
 
-### Create the .tidetree input files
-Usually BEAST 2 expects an alignment of nucleotides as input. However, our alignment consists of integers, encoding the different editing outcomes (e.g. 0, 1 or 2). To still enable BEAUti to load our data, we have to create .tidetree files (which under the hood make BEAUti use an AlignmentFromNexus importer class that accepts integer values separated by commas).
 
-We provide [a script](https://github.com/seidels/tidetree/tree/main/scripts) to convert standard .csv files into .tidetree files (in NEXUS format). For this tutorial, we will work directly with the .tidetree files.
+### Creating `.tidetree` input files
+Usually BEAST 2 expects an alignment of nucleotides as input. However, our alignment consists of integers, encoding the different editing outcomes (e.g. 0, 1 or 2). To still enable BEAUti to load our data, we have to create `.tidetree` files (which under the hood make BEAUti use an `AlignmentFromNexus` importer class that accepts integer values separated by commas).
+
+We provide [a script](https://github.com/seidels/tidetree/tree/main/scripts) to convert standard `.csv` files into `.tidetree` files (in NEXUS format). For this tutorial, we will work directly with the `.tidetree` files.
 
 <figure>
-    <!--a id="fig:download"></a-->
+    <a id="fig:download"></a>
     <img style="width:80%;" src="figures/4-alignment.png">
-    <figcaption>Exemplary data input file in csv format, where every cell in the table shows the editing outcome at a specific target site (column) for a given cell (row).</figcaption>
+    <figcaption>Figure 3: Example data input file in .csv format, where every cell in the table shows the editing outcome at a specific target site (column) for a given cell (row).</figcaption>
 </figure>
+
 
 > **Topic for discussion**
+>
 > What does the entry "0" in cell 1 at site 3 stand for?
 
 
 
 ## Setting up the analysis in BEAUti
 
-At the start, we load the TiDeTree template by selecting **File > Template > tidetree**.
+We will use BEAUti2 to select the priors and starting values for our analysis and save these settings into a BEAST2 XML file.
 
-### Loading sequence data
-To load the data, select **File > Add Alignment** and navigate to the directory containing the tutorial data. This directory contains 10 `.tidetree` files, each containing the data for a colony. Since the directory contains only these files and nothing else, we can select them all simply using Ctrl+A (or Command+A on a Mac) and then press "Open". If you are short on time, feel free to only load the top 3 alignments for the purpose of going through the tutorial, because we will have to repeat some steps for each alignment.
+> Starting **BEAUti2** and load the TiDeTree template by selecting **File > Template > tidetree**.
+
+
+### Loading the sequencing data
+
+Next we will load the `.tidetree` input files from the mouse embryonic stem cell experiment.
+
+
+> To load the data, select **File > Add Alignment** and navigate to the directory containing the tutorial data. This directory contains 10 `.tidetree` files, each containing the data for a colony. Since the directory contains only these files and nothing else, we can select them all simply using **Ctrl+A** (or **Command+A** on a Mac) and then click on **Open**. 
+>
+> If you are short on time, feel free to only load the first 3 alignments for the purpose of going through the tutorial, because we will have to repeat some steps for each alignment.
+
+Now you should see 10 new records—one for each alignment—listed in BEAUti ([Figure 4](#fig:partitions)).
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/5-dat-in-beauti.png">
-    <figcaption>Figure 3: Importing the alignments into BEAUTI. </figcaption>
+    <a id="fig:partitions"></a>
+    <img style="width:100%;" src="figures/5-dat-in-beauti.png">
+    <figcaption>Figure 4: Importing the alignments into BEAUTI. </figcaption>
 </figure>
 
-Now you should see 10 new records—one for each alignment—listed in BEAUti. By default, BEAUti treats each dataset independently, assigning separate site, clock, and tree models to each one. However, since all our data was generated under the same experimental conditions, it makes sense to assume that the editing process was governed by the same parameters across datasets.
+By default, BEAUti treats each dataset independently, assigning separate site, clock, and tree models to each one. However, since all our data was generated under the same experimental conditions, it makes sense to assume that the editing process was governed by the same parameters across datasets.
 
 To reflect this, we’ll link the Clock Models and Site Models across the datasets. This means that instead of estimating separate parameters for each alignment, BEAST 2 will infer a single, shared set of parameters for the editing process.
 
-To do so, click on one row and then press Ctrl+A, or Command+A on a Mac to select all alignments. Then, press the "Link Site Models" and "Link Clock Models" buttons.
+> Click on one row and then press **Ctrl+A**, (or **Command+A** on a Mac) to select all alignments. Then, click on **Link Site Models** and **Link Clock Models** ([Figure 5](#fig:linkedmodels)).
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/6-linked-models.png">
+    <a id="fig:linkedmodels"></a>
+    <img style="width:100%;" src="figures/6-linked-models.png">
     <figcaption>Figure 4: Linked clock and site models.</figcaption>
 </figure>
 
+
 > **Topic for discussion**
+>
 > When we link models like this, we’re essentially pooling information to estimate shared parameters. Can you identify which specific parameters are estimated jointly when we link the Clock Models and the Site Models, respectively?
 >
 
 
-### Specify the sampling times
-The data that we’ve loaded was sampled contemporaneously and we do not need to specify the sampling times per se. However, in order to estimate the clock rate, we have to specify them as "Use tip dates" and select the dates as "Since some time in the past". 
+### Specifying the sampling times
+The data that we’ve loaded was sampled contemporaneously and we do not need to specify the sampling times _per se_. However, in order to estimate the clock rate, we have to specify them as "Use tip dates" and select the dates as "Since some time in the past". 
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -155,7 +165,7 @@ The data that we’ve loaded was sampled contemporaneously and we do not need to
 
 
 
-### Specify the Site Model
+### Specifying the Site Model
 Next, navigate to the *Site Model* tab. As you have loaded the TiDeTree template, BEAUti directly provides you with the TiDeTree Substitution Model.
 
 We keep the "Gamma Category Count" set at 0, which means that we are not modelling site heterogeneity. Further below, you can see the parameters of the substition model. The "Edit Rates" are initialised and set to be estimated. Based on the `.tidetree` files, BEAUti correctly detected that there are 2 edit outcomes and therefore initialised a vector with 2 elements.
@@ -170,10 +180,11 @@ You’ll also see the Silencing Rate parameter, which models the possibility tha
 
 
 > **Topic for discussion**
+>
 > Do we want to allow for variable edit rates? Why or why not?
 
 
-### Set the clock model
+### Setting the clock model
 Now, we move to the *Clock Model* tab. For this relatively short experiment, we assume that the rate of editing did not change. Thus, we keep the "Strict Clock".
 
 
@@ -184,6 +195,7 @@ Now, we move to the *Clock Model* tab. For this relatively short experiment, we 
 </figure>
 
 > **Topic for discussion**
+>
 > All our tips are sampled contemporaneously here. Why can we still estimate the clock rate?
 
 ### Initialization
@@ -209,7 +221,7 @@ Further, we will set every experiment length to 54 hours and uncheck the "estima
 
 
 
-### Set priors
+### Setting priors
 Now, we want to set the priors for the parameters of our model under the *Priors* tab.
 
 We'll start by choosing the phylodynamic model that describes how the trees were generated. Given the small size of the cell population (4 − 40 cells), we expect the population growth process to be highly stochastic. The birth-death-sampling model can account for these stochastic fluctuations.
@@ -236,7 +248,7 @@ So, for each alignment, we pick "Birth-death model" from the drop-down menu. The
     <figcaption>Figure 10: Specify the prior on the effective birth rate. </figcaption>
 </figure>
 
-Additionall, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution just set. So select "initial" and set "Value" to 0.05.
+Additionally, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution just set. So select "initial" and set "Value" to 0.05.
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -292,7 +304,9 @@ Once your analysis is fully set up, go to **File → Save**, navigate to your de
 </figure>
 
 
- **Tip:** If BEAUti gives you trouble when generating the XML file and you’d like to proceed with the analysis right away, you can also download and use a pre-made XML file [link](https://github.com/seidels/TiDeTree-Tutorial/tree/master/precooked_runs/tutorial-unlinked-birth-death.xml).
+ > **Tip:** 
+ >
+ > If BEAUti gives you trouble when generating the XML file and you’d like to proceed with the analysis right away, you can also download and use a [pre-made XML file](https://github.com/seidels/TiDeTree-Tutorial/tree/master/precooked_runs/tutorial-unlinked-birth-death.xml).
 
 ### Analyse the data
 
@@ -408,7 +422,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
     <figcaption>Figure 23: TreeAnnotator settings for CCD tree.</figcaption>
 </figure>
 
-## Analyse the summary trees
+## Analysing the summary trees
 
 > Open **FigTree** and load your chosen summary tree.
 >
@@ -423,7 +437,9 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
     <figcaption>Figure 24: TreeAnnotator settings for CCD tree.</figcaption>
 </figure>
 
-> **Topic for discussion** How do the posterior node labels compare to the observations we made when analysing the tree posterior in DensiTree?
+> **Topic for discussion** 
+>
+> How do the posterior node labels compare to the observations we made when analysing the tree posterior in DensiTree?
 
 
 ----
@@ -432,7 +448,6 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
 
 - [Bayesian Evolutionary Analysis with BEAST 2](http://www.beast2.org/book.html) {% cite BEAST2book2014 --file TiDeTree-Tutorial/master-refs.bib %}
 - BEAST 2 website and documentation: [http://www.beast2.org/](http://www.beast2.org/)
-- BEAST 1 website and documentation: [http://beast.bio.ed.ac.uk](http://beast.bio.ed.ac.uk)
 - Join the BEAST user discussion: [http://groups.google.com/group/beast-users](http://groups.google.com/group/beast-users) 
 
 ----
