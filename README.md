@@ -10,6 +10,7 @@ figtreeversion: 1.4.x
 ---
 
 
+
 # Background
 
 Understanding how cells divide, differentiate, and die over time is central to developmental biology and cancer research. Recent advances in single-cell lineage recording allow us to track cell histories —but inferring developmental dynamics from these data requires statistical tools {% cite Askary2024 --file TiDeTree-Tutorial/master-refs %}.
@@ -68,7 +69,7 @@ TiDeTree can be easily installed via the BEAUti package manager.
 
 <figure>
     <a id="fig:download"></a>
-    <img style="width:100%;" src="figures/2-download.png">
+    <img style="width:100%;" src="figures/download.png">
     <figcaption>Figure 1:  Installing TiDeTree via the Package Manager</figcaption>
 </figure>
 
@@ -130,20 +131,33 @@ Now you should see 10 new records—one for each alignment—listed in BEAUti ([
 
 <figure>
     <a id="fig:partitions"></a>
-    <img style="width:100%;" src="figures/5-dat-in-beauti.png">
+    <img style="width:100%;" src="figures/dat-in-beauti.png">
     <figcaption>Figure 4: Importing the alignments into BEAUTI. </figcaption>
 </figure>
+
+> Double click on one of the alignments to display its contents ([Figure 5](#fig:alignment-beauti)).
+
+<figure>
+    <a id="fig:alignment-beauti"></a>
+    <img style="width:50%;" src="figures/alignment-beauti.png">
+    <figcaption>Figure 5: One of the alignments as displayed in BEAUTI. </figcaption>
+</figure>
+
 
 By default, BEAUti treats each dataset independently, assigning separate site, clock, and tree models to each one. However, since all our data was generated under the same experimental conditions, it makes sense to assume that the editing process was governed by the same parameters across datasets.
 
 To reflect this, we’ll link the Clock Models and Site Models across the datasets. This means that instead of estimating separate parameters for each alignment, BEAST 2 will infer a single, shared set of parameters for the editing process.
 
 > Click on one row and then press **Ctrl+A**, (or **Command+A** on a Mac) to select all alignments. Then, click on **Link Site Models** and **Link Clock Models** ([Figure 5](#fig:linkedmodels)).
+>
+> Double click on the site model for the first alignment (****) and rename it to **sitemodel**.
+>
+> Double click on the clock model for the first alignmentn (****) and rename it to **clockmodel**.
 
 <figure>
     <a id="fig:linkedmodels"></a>
-    <img style="width:100%;" src="figures/6-linked-models.png">
-    <figcaption>Figure 4: Linked clock and site models.</figcaption>
+    <img style="width:100%;" src="figures/linked-models.png">
+    <figcaption>Figure 6: Linked clock and site models.</figcaption>
 </figure>
 
 
@@ -154,28 +168,38 @@ To reflect this, we’ll link the Clock Models and Site Models across the datase
 
 
 ### Specifying the sampling times
-The data that we’ve loaded was sampled contemporaneously and we do not need to specify the sampling times _per se_. However, in order to estimate the clock rate, we have to specify them as "Use tip dates" and select the dates as "Since some time in the past". 
+The data that we’ve loaded was sampled contemporaneously and we do not need to specify the sampling times _per se_. However, in order to estimate the clock rate, we have to tell BEAST to use the tip dates and to measure them as some time in the past. 
+
+> Navigate to the **Tip Dates** tab. Check the **Use tip dates** box and make sure since **Since some time in the past** is selected in the drop-down list ([Figure 7](#fig:tip-dates)).
+>
+> Now select all of the other alignments using **Ctrl+A**, (or **Command+A** on a Mac) and clone the tip dates from **alignment_1**.
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/7-2-tip-dates.png">
-    <figcaption>Figure 5: Tip dates panel setup</figcaption>
+    <a id="fig:tip-dates"></a>
+    <img style="width:100%;" src="figures/tip-dates.png">
+    <figcaption>Figure 7: Tip dates panel setup</figcaption>
 </figure>
 
 
 
 
-### Specifying the Site Model
-Next, navigate to the *Site Model* tab. As you have loaded the TiDeTree template, BEAUti directly provides you with the TiDeTree Substitution Model.
+### Specifying the site model
 
-We keep the "Gamma Category Count" set at 0, which means that we are not modelling site heterogeneity. Further below, you can see the parameters of the substition model. The "Edit Rates" are initialised and set to be estimated. Based on the `.tidetree` files, BEAUti correctly detected that there are 2 edit outcomes and therefore initialised a vector with 2 elements.
 
-You’ll also see the Silencing Rate parameter, which models the possibility that certain barcode targets become progressively and irreversibly silenced—preventing their detection through single-cell RNA sequencing. In our dataset, no silencing was observed, so we set the value to 0.0 and uncheck the estimate box. Lastly, we set the Edit Height and Edit Duration to 54, since editing was active for the entire duration of the experiment (54 hours).
+
+
+> Navigate to the **Site Model** tab. As you have loaded the TiDeTree template, BEAUti automatically provides you with the **TiDeTree Substitution Model**.
+>
+> We keep the **Gamma Category Count** set at **0**, which means that we are not modelling site heterogeneity. Further below, you can see the parameters of the substition model. The **Edit Rates** are initialised and set to be estimated. Based on the `.tidetree` files, BEAUti correctly detected that there are 2 edit outcomes and therefore initialised a vector with 2 elements.
+>
+> You’ll also see the **Silencing Rate** parameter, which models the possibility that certain barcode targets become progressively and irreversibly silenced—preventing their detection through single-cell RNA sequencing. In our dataset, no silencing was observed, so we set the value to **0.0** and uncheck the **estimate** box. Lastly, we set the **Edit Height** and **Edit Duration** to **54**, since editing was active for the entire duration of the experiment (54 hours).
+
+Your site model tab should now look as in [Figure 8](#fig:substmodel).
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/7-substmodel.png">
-    <figcaption>Figure 6: Specifying the substitution model.</figcaption>
+    <a id="fig:substmodel"></a>
+    <img style="width:100%;" src="figures/substmodel.png">
+    <figcaption>Figure 8: Specifying the substitution model.</figcaption>
 </figure>
 
 
@@ -185,62 +209,68 @@ You’ll also see the Silencing Rate parameter, which models the possibility tha
 
 
 ### Setting the clock model
-Now, we move to the *Clock Model* tab. For this relatively short experiment, we assume that the rate of editing did not change. Thus, we keep the "Strict Clock".
 
+Now, we have to set the clock model. For this relatively short experiment, we assume that the rate of editing did not change. Thus, we keep the default strict clock model that assumes no branch rate variation. Since we linked clock models among trees all branches in all trees will have the same substitution rate.
+
+> Navigate to the **Clock Model** tab. Verify that the **estimate** box is checked ([Figure 9](#fig:clock))
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/8-clock.png">
-    <figcaption>Figure 7: Specifying the site model.</figcaption>
+    <a id="fig:clock"></a>
+    <img style="width:100%;" src="figures/clock.png">
+    <figcaption>Figure 9: Specifying the site model.</figcaption>
 </figure>
 
 > **Topic for discussion**
 >
 > All our tips are sampled contemporaneously here. Why can we still estimate the clock rate?
 
-### Initialization
-Next, we come to the parameter initialization tab. Here, we will initialise the tree and experiment length for every alignment. This is also a great example of a step that’s much easier to edit directly in the XML file—consider this your gentle nudge to get comfortable with a bit of XML hacking! ;)
 
-We'll initialise the tree using a custom starting tree class. The key idea is to ensure that the tree fits within the timeframe of the experiment and does not have a 0 likelihood. By setting the root height close to the total duration (e.g., 53 hours for a 54-hour experiment), and matching the editing height and editing duration, we ensure that the tree has a positive likelihood.
 
-So, go ahead and set the root height, editing height, and editing duration to 53 for all 10 trees (for the 10 alignments).
+### Setting initial values
+
+Next, we come to the parameter initialization tab. Here, we will initialise the tree and experiment length for every alignment. This is also a great example of a step that’s much easier to edit directly in the XML file—consider this your gentle nudge to get comfortable with a bit of XML hacking! <i class="bi bi-emoji-wink"></i>
+
+We'll initialise the tree using a custom starting tree class implemented within the TiDeTree package. The key idea is to ensure that the tree fits within the timeframe of the experiment and does not have a 0 likelihood. By setting the root height close to the total duration (e.g., 53 hours for a 54-hour experiment), and matching the editing height and editing duration, we ensure that the tree has a positive likelihood.
+
+> Navigate to the **Initialization** tab. Now set the **Root Height**, **Edit Duration** and **Edit Height** to **53** for each of the 10 **Tree.t** parameters, representing the 10 alignments ([Figure 10](#fig:init-tree)). 
+
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/9-init-tree.png">
-    <figcaption>Figure 8: Initialise the starting tree.</figcaption>
+    <a id="fig:init-tree"></a>
+    <img style="width:100%;" src="figures/init-tree.png">
+    <figcaption>Figure 10: Initialising the starting trees.</figcaption>
 </figure>
 
-Further, we will set every experiment length to 54 hours and uncheck the "estimate" mark because we do not want to estimate it.
+> Further, we will set every **experimentLength** parameter to **54** hours and uncheck the **Estimate** box, because know _a priori_ how long each experiment was run and we do not want to estimate it ([Figure 11](#fig:init-experiment-length)).
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/10-init-experiment-length.png">
-    <figcaption>Figure 9: Set the experiment duration.</figcaption>
+    <a id="fig:init-experiment-length"></a>
+    <img style="width:100%;" src="figures/init-experiment-length.png">
+    <figcaption>Figure 11: Set the experiment duration.</figcaption>
 </figure>
 
 
 
 ### Setting priors
-Now, we want to set the priors for the parameters of our model under the *Priors* tab.
+Now, we want to set the priors for the parameters of our model.
 
 We'll start by choosing the phylodynamic model that describes how the trees were generated. Given the small size of the cell population (4 − 40 cells), we expect the population growth process to be highly stochastic. The birth-death-sampling model can account for these stochastic fluctuations.
 
-
 In BEAUti, you'll notice that a separate prior is defined for every tree. Since all colonies were grown under the same experimental conditions, we want them to share the same birth and death rate parameters. Unfortunately, BEAUti doesn’t currently support linking these priors directly through the interface. So we will first create an xml with separate parameters for each colony, and in a second step link the parameters by editing the XML and see how the runs compare.
 
-> **Topic for discussion**
-> 
-> How do you expect the runs to differ?
->
 
-<figure>
-    <!--a id="fig:download"></a-->
+
+<!--figure>
+    <a id="fig:download"></a>
     <img style="width:80%;" src="figures/9-trees.png">
     <figcaption>Figure 12:</figcaption>
-</figure>
+</figure-->
 
-So, for each alignment, we pick "Birth-death model" from the drop-down menu. Then, we specify the effective birth rate of the Birth-death model, which is the cell division minus the cell death rate. We pick a Uniform prior over [0, 0.1]. This reflects our expectation that the total number of cells remain below 220 at the end of the experiment (after 54 h). 
+> Navigate to the **Priors** tab. For each alignment, select **Birth-death model** from the drop-down menu. 
+>
+> Then, we specify the prior for the effective birth rate of the birth-death model (**BDBirthRate.t** for each of the alignments), which is the cell division rate minus the cell death rate. We select a **Uniform** prior over [0, 0.1]. This reflects our expectation that the total number of cells remain below 220 at the end of the experiment (after 54 h). 
+> 
+> For each **BDBirthRate.t** parameter ensure that the selected prior distribution is **Uniform** and set **Upper** to **0.1**.
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -248,7 +278,10 @@ So, for each alignment, we pick "Birth-death model" from the drop-down menu. The
     <figcaption>Figure 10: Specify the prior on the effective birth rate. </figcaption>
 </figure>
 
-Additionally, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution just set. So select "initial" and set "Value" to 0.05.
+Additionally, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution just set. 
+
+> For each **BDBirthRate.t** parameter click on the initial value box and set **Value** to **0.05**.
+
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -258,7 +291,7 @@ Additionally, we also want to set the initial value of the effective birth rate 
 
 
 
-Additionally, we place a Uniform prior over [0, 1] on the relative death rate or cell turnover (death rate / birth rate), stating that we expect the birth rate to be larger than the death rate.
+Additionally, we place a Uniform prior over [0, 1] on the relative death rate or cell turnover (death rate / birth rate), stating that we expect the birth rate to be larger than the death rate. This should be the default prior, so we don't need to do anything ([Figure 13]()).
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -266,8 +299,12 @@ Additionally, we place a Uniform prior over [0, 1] on the relative death rate or
     <figcaption>Figure 11: Specify the prior on the relative death rate.</figcaption>
 </figure>
 
+Finally, we set a prior on the clock rate.
 
-Then we place a lognormal prior with mean -5 and sd 1 on the clock rate, which translates to us expecting between 1 to 10 edits to occur over 54 hours. We keep the Dirichlet prior on the edit probabilities.
+> Find the **clockRate.c** parameter and select **Log Normal** from the drop-down menu. Set the mean **M** to **-5** and the standard deviation **S** to **1** ([Figure ]()). 
+
+
+This prior translates to us expecting between 1 to 10 edits to occur over 54 hours. We keep the default Dirichlet prior on the edit probabilities.
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -277,16 +314,26 @@ Then we place a lognormal prior with mean -5 and sd 1 on the clock rate, which t
 
 Here's a snapshot of how your overall prior tab should now look like.
 
-<figure>
-    <!--a id="fig:download"></a-->
+<!--figure>
+    <a id="fig:download"></a>
     <img style="width:80%;" src="figures/12-overall-priors.png">
     <figcaption>Figure 13: Specify the prior on the edit probabilities.</figcaption>
-</figure>
+</figure-->
+
+
+
+> **Topic for discussion**
+> 
+> How do you expect the results to differ when birth and death rates are shared amonog alignments?
+>
+
 
 
 ### MCMC
 
-Under the MCMC tab, set the **chain length** to `5 * 10^6` and the **sampling interval** to `10^3`. Additionally, make sure the tree logs are being written to separate files by renaming them separately for each alignment.
+Under the MCMC tab, 
+
+> Navigate to the **MCMC** tab. Set the **Chain Length** to **5e6** (5 million). Reveal the options for **tracelog** and set **Log Every** to **1000**. Now do the same for each of the 10 **treelogs**.  and the **sampling interval** to `10^3`. Additionally, make sure the tree logs are being written to separate files by renaming the **FileName** for each tree to `$(filebase).$(tree).trees`.
 
 <figure>
     <!--a id="fig:download"></a-->
@@ -294,14 +341,16 @@ Under the MCMC tab, set the **chain length** to `5 * 10^6` and the **sampling in
     <figcaption>Figure 15: Specify distinct tree log file names.</figcaption>
 </figure>
 
-Once your analysis is fully set up, go to **File → Save**, navigate to your desired directory, and save the BEAST input file with a clear and descriptive name—e.g., `tidetree_tutorial.xml`.
+Now we are ready to save the XML file! 
+
+> Once your analysis is fully set up, go to **File > Save**, navigate to your desired directory, and save the BEAST input file with a clear and descriptive name—e.g., `tidetree_tutorial.xml`.
 
 
-<figure>
-    <!--a id="fig:download"></a-->
+<!--figure>
+    <a id="fig:download"></a>
     <img style="width:80%;" src="figures/15-MCMC.png">
     <figcaption>Figure 14: MCMC setup.</figcaption>
-</figure>
+</figure-->
 
 
  > **Tip:** 
