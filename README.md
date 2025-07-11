@@ -275,7 +275,7 @@ In BEAUti, you'll notice that a separate prior is defined for every tree. Since 
 
 <figure>
     <a id="fig:birth-rate"></a>
-    <img style="width:100%;" src="figures/10-birth-rate.png">
+    <img style="width:100%;" src="figures/birth-rate.png">
     <figcaption>Figure 12: Specifying the prior on the effective birth rate. </figcaption>
 </figure>
 
@@ -286,7 +286,7 @@ Additionally, we also want to set the initial value of the effective birth rate 
 
 <figure>
     <a id="fig:init-birth-rate"></a>
-    <img style="width:80%;" src="figures/11-init-birth-rate.png">
+    <img style="width:80%;" src="figures/init-birth-rate.png">
     <figcaption>Figure 13: Setting the initial value for the effective birth rate.</figcaption>
 </figure>
 
@@ -296,7 +296,7 @@ Additionally, we place a Uniform prior over [0, 1] on the relative death rate or
 
 <figure>
     <a id="fig:death-rate"></a>
-    <img style="width:100%;" src="figures/11-death-rate.png">
+    <img style="width:100%;" src="figures/death-rate.png">
     <figcaption>Figure 14: The default prior on the relative death rate.</figcaption>
 </figure>
 
@@ -309,7 +309,7 @@ This prior translates to us expecting between 1 to 10 edits to occur over 54 hou
 
 <figure>
     <a id="fig:prior-clock"></a>
-    <img style="width:100%;" src="figures/12-prior-clock.png">
+    <img style="width:100%;" src="figures/prior-clock.png">
     <figcaption>Figure 15: Specifying the prior on the clock rate.</figcaption>
 </figure>
 
@@ -335,11 +335,11 @@ This prior translates to us expecting between 1 to 10 edits to occur over 54 hou
 
 Before we can save our XML file we need to set up the MCMC chain and the output files.
 
-> Navigate to the **MCMC** tab. Set the **Chain Length** to **5e6** (5 million). Reveal the options for **tracelog** and set **Log Every** to **1000**. Now do the same for each of the 10 **treelogs**. Additionally, make sure the tree logs are being written to separate files by renaming the **FileName** for each tree to `$(filebase).$(tree).trees` if that is not already the filename ([Figure 16](#fig:mcmc)).
+> Navigate to the **MCMC** tab. Set the **Chain Length** to **5E6** (5 million). Reveal the options for **tracelog** and set **Log Every** to **1000**. Now do the same for each of the 10 **treelogs**. Additionally, make sure the tree logs are being written to separate files by renaming the **FileName** for each tree to `$(filebase).$(tree).trees` if that is not already the filename ([Figure 16](#fig:mcmc)).
 
 <figure>
     <a id="fig:mcmc"></a>
-    <img style="width:100%;" src="figures/16-log-trees-separate.png">
+    <img style="width:100%;" src="figures/log-trees-separate.png">
     <figcaption>Figure 16: Specifying distinct tree log file names.</figcaption>
 </figure>
 
@@ -376,7 +376,7 @@ Now you are ready to start your BEAST2 analyses.
 
 ### Unlinked analysis
 
-We will use Tracer to examine convergence and look at parameter estimates. For this section you can either use the log file output from your BEAST2 run, or the _pre-cooked_ output files on the left-hand panel.
+We will use Tracer to examine convergence and look at parameter estimates. For this section you can either use the log file output from your BEAST2 run, or the _pre-cooked_ output files on the left-hand panel. 
 
 
 > Load the file `tutorial-unlinked-birth-death.log` into **Tracer** to assess mixing and the parameter estimates. (Note that your own log file may be called something else). 
