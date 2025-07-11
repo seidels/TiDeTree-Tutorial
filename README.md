@@ -429,7 +429,7 @@ The key difference is that in our *unlinked* analysis, we estimated a separate b
 
 <figure>
     <a id="fig:xml"></a>
-    <img style="width:100%;" src="figures/create-linked-xml.png">
+    <img style="width:100%;" src="figures/24-create-linked-xml.png">
     <figcaption>Figure 20: XML hacking to pool birth and death rates across datasets.</figcaption>
 </figure>
 
