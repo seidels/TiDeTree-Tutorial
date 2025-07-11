@@ -383,7 +383,7 @@ We will use Tracer to examine convergence and look at parameter estimates. For t
 
 <figure>
     <a id="fig:tracer"></a>
-    <img style="width:100%;" src="figures/17-tracer.png">
+    <img style="width:100%;" src="figures/tracer.png">
     <figcaption>Figure 17: Checking convergence for the unlinked analysis.</figcaption>
 </figure>
 
@@ -396,11 +396,11 @@ Let's inspect the estimated clock rate, representing the rate of introducing an 
 
 <figure>
     <a id="fig:log-clock"></a>
-    <img style="width:100%;" src="figures/18-log-clock.png">
+    <img style="width:100%;" src="figures/log-clock.png">
     <figcaption>Figure 18: Estimated clock rate (edit rate) marginal posterior.</figcaption>
 </figure>
 
-We see that the estimated median posterior rate is 0.015 edits per site per hour. Over the 54-hour experiment, this corresponds to 0.8 expected edits per site. 
+We see that the estimated median posterior rate is about 0.015 edits per site per hour. Over the 54-hour experiment, this corresponds to 0.8 expected edits per site. 
 
 Now, let's examine the net growth rates (corresponding to the effective birth rates of the birth-death models) of each dataset.
 
@@ -408,7 +408,7 @@ Now, let's examine the net growth rates (corresponding to the effective birth ra
 
 <figure>
     <a id="fig:unlinked-net-growth"></a>
-    <img style="width:100%;" src="figures/20-unlinked-net-growth.png">
+    <img style="width:100%;" src="figures/unlinked-net-growth.png">
     <figcaption>Figure 19: Estimated net growth marginal posteriors.</figcaption>
 </figure>
 
@@ -429,11 +429,12 @@ The key difference is that in our *unlinked* analysis, we estimated a separate b
 
 <figure>
     <a id="fig:xml"></a>
-    <img style="width:100%;" src="figures/24-create-linked-xml.png">
+    <img style="width:100%;" src="figures/create-linked-xml.png">
     <figcaption>Figure 20: XML hacking to pool birth and death rates across datasets.</figcaption>
 </figure>
 
-> Load the file `tutorial-linked-birth-death.log` into **Tracer**. Feel free to also run `tutorial-linked-birth-death.xml` and produce your own log and trees files.
+> Load the file `tutorial-linked-birth-death.log` into **Tracer**. 
+> (Feel free to also run `tutorial-linked-birth-death.xml` and produce your own log and trees files).
 
 
 We can see that all ESS values are above 200 and that the Traces look well mixed, indicating convergence ([Figure 21](#fig:linked-traces)).
@@ -441,20 +442,19 @@ We can see that all ESS values are above 200 and that the Traces look well mixed
 
 <figure>
     <a id="fig:linked-traces"></a>
-    <img style="width:100%;" src="figures/28-linked-traces.png">
+    <img style="width:100%;" src="figures/linked-traces.png">
     <figcaption>Figure 21: Checking convergence for the linked analysis.</figcaption>
 </figure>
 
 
 Let us now check how the estimated net growth rates compare to the unlinked analysis.
 
-> Click on **BDBirthRate[1-10]** and the Maringal Density Tab.
+> Select on **BDBirthRate.t:alignment_1** and and then click on **Estimates**. Note that because the relative birth rates are linked we only have one parameter in the log file. 
 
-> Select **BDBirthRate[1-10]** (select all 10 relative birth rates using **Shift+Click**) and then click on **Estimates**.
 
 <figure>
     <a id="fig:linked-net-growth"></a>
-    <img style="width:100%;" src="figures/21-linked-net-growth.png">
+    <img style="width:100%;" src="figures/linked-net-growth.png">
     <figcaption>Figure 22: Estimated net growth marginal posteriors pooled across alignments.</figcaption>
 </figure>
 
