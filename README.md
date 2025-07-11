@@ -10,6 +10,24 @@ figtreeversion: 1.4.x
 ---
 
 
+---
+author: Sophie Seidel
+editor: Louis du Plessis
+level: Intermediate
+title: TiDeTree Tutorial
+subtitle: Reconstructing time-scaled single-cell phylogenies from genetic lineage
+  tracing data
+beastversion: ">= 2.7"
+tracerversion: 1.7.x
+figtreeversion: 1.4.x
+layout: tutorial
+tutorial: TiDeTree-tutorial
+permalink: "/:path/:basename:output_ext"
+---
+
+
+
+
 
 # Background
 
@@ -88,7 +106,7 @@ To understand how the cells divide over time, each colony was lineage traced usi
 
 <figure>
     <a id="fig:intMEMOIR"></a>
-    <img style="width:100%;" src="figures/3-data.png">
+    <img style="width:80%;" src="figures/data_crop.png">
     <figcaption> Figure 2: Setup of intMEMOIR for lineage tracing in stem cells. Adapted from {% cite GONG2021 --file TiDeTree-Tutorial/master-refs %}.</figcaption>
 </figure>
 
@@ -148,11 +166,11 @@ By default, BEAUti treats each dataset independently, assigning separate site, c
 
 To reflect this, we’ll link the Clock Models and Site Models across the datasets. This means that instead of estimating separate parameters for each alignment, BEAST 2 will infer a single, shared set of parameters for the editing process.
 
-> Click on one row and then press **Ctrl+A**, (or **Command+A** on a Mac) to select all alignments. Then, click on **Link Site Models** and **Link Clock Models** ([Figure 5](#fig:linkedmodels)).
+> Click on one row and then press **Ctrl+A**, (or **Command+A** on a Mac) to select all alignments. Then, click on **Link Site Models** and **Link Clock Models** ([Figure 6](#fig:linkedmodels)).
 >
-> Double click on the site model for the first alignment (****) and rename it to **sitemodel**.
+> Double click on the site model for the first alignment and rename it to **sitemodel**.
 >
-> Double click on the clock model for the first alignmentn (****) and rename it to **clockmodel**.
+> Double click on the clock model for the first alignment and rename it to **clockmodel**.
 
 <figure>
     <a id="fig:linkedmodels"></a>
@@ -168,7 +186,7 @@ To reflect this, we’ll link the Clock Models and Site Models across the datase
 
 
 ### Specifying the sampling times
-The data that we’ve loaded was sampled contemporaneously and we do not need to specify the sampling times _per se_. However, in order to estimate the clock rate, we have to tell BEAST to use the tip dates and to measure them as some time in the past. 
+The data that we’ve loaded was sampled contemporaneously and we do not need to specify the sampling times per se. However, in order to estimate the clock rate, we have to tell BEAST to use the tip dates and to measure them as some time in the past. 
 
 > Navigate to the **Tip Dates** tab. Check the **Use tip dates** box and make sure since **Since some time in the past** is selected in the drop-down list ([Figure 7](#fig:tip-dates)).
 >
@@ -270,51 +288,52 @@ In BEAUti, you'll notice that a separate prior is defined for every tree. Since 
 >
 > Then, we specify the prior for the effective birth rate of the birth-death model (**BDBirthRate.t** for each of the alignments), which is the cell division rate minus the cell death rate. We select a **Uniform** prior over [0, 0.1]. This reflects our expectation that the total number of cells remain below 220 at the end of the experiment (after 54 h). 
 > 
-> For each **BDBirthRate.t** parameter ensure that the selected prior distribution is **Uniform** and set **Upper** to **0.1**.
+> For each **BDBirthRate.t** parameter ensure that the selected prior distribution is **Uniform** and set **Upper** to **0.1** ([Figure 12](#fig:birth-rate)).
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/10-birth-rate.png">
-    <figcaption>Figure 10: Specify the prior on the effective birth rate. </figcaption>
+    <a id="fig:birth-rate"></a>
+    <img style="width:100%;" src="figures/10-birth-rate.png">
+    <figcaption>Figure 12: Specify the prior on the effective birth rate. </figcaption>
 </figure>
 
 Additionally, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution just set. 
 
-> For each **BDBirthRate.t** parameter click on the initial value box and set **Value** to **0.05**.
+> For each **BDBirthRate.t** parameter click on the initial value box and set **Value** to **0.05** ([Figure 13](#fig:init-birth-rate)).
 
 
 <figure>
-    <!--a id="fig:download"></a-->
+    <a id="fig:init-birth-rate"></a>
     <img style="width:80%;" src="figures/11-init-birth-rate.png">
-    <figcaption>Figure 11: Set initial value for the effective birth rate.</figcaption>
+    <figcaption>Figure 13: Set initial value for the effective birth rate.</figcaption>
 </figure>
 
 
 
-Additionally, we place a Uniform prior over [0, 1] on the relative death rate or cell turnover (death rate / birth rate), stating that we expect the birth rate to be larger than the death rate. This should be the default prior, so we don't need to do anything ([Figure 13]()).
+Additionally, we place a Uniform prior over [0, 1] on the relative death rate or cell turnover (death rate / birth rate), stating that we expect the birth rate to be larger than the death rate. This should be the default prior, so we don't need to do anything ([Figure 14](#fig:death-rate)).
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/11-death-rate.png">
-    <figcaption>Figure 11: Specify the prior on the relative death rate.</figcaption>
+    <a id="fig:death-rate"></a>
+    <img style="width:100%;" src="figures/11-death-rate.png">
+    <figcaption>Figure 14: Specify the prior on the relative death rate.</figcaption>
 </figure>
 
 Finally, we set a prior on the clock rate.
 
-> Find the **clockRate.c** parameter and select **Log Normal** from the drop-down menu. Set the mean **M** to **-5** and the standard deviation **S** to **1** ([Figure ]()). 
+> Find the **clockRate.c** parameter and select **Log Normal** from the drop-down menu. Set the mean **M** to **-5** and the standard deviation **S** to **1** ([Figure 15](#fig:prior-clock)). 
 
 
 This prior translates to us expecting between 1 to 10 edits to occur over 54 hours. We keep the default Dirichlet prior on the edit probabilities.
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/12-prior-clock.png">
-    <figcaption>Figure 12: Specify the prior on the clock rate.</figcaption>
+    <a id="fig:prior-clock"></a>
+    <img style="width:100%;" src="figures/12-prior-clock.png">
+    <figcaption>Figure 15: Specify the prior on the clock rate.</figcaption>
 </figure>
 
-Here's a snapshot of how your overall prior tab should now look like.
 
 <!--figure>
+    Here's a snapshot of how your overall prior tab should now look like.
+
     <a id="fig:download"></a>
     <img style="width:80%;" src="figures/12-overall-priors.png">
     <figcaption>Figure 13: Specify the prior on the edit probabilities.</figcaption>
@@ -331,14 +350,14 @@ Here's a snapshot of how your overall prior tab should now look like.
 
 ### MCMC
 
-Under the MCMC tab, 
+Before we can save our XML file we need to set up the MCMC chain and the output files.
 
-> Navigate to the **MCMC** tab. Set the **Chain Length** to **5e6** (5 million). Reveal the options for **tracelog** and set **Log Every** to **1000**. Now do the same for each of the 10 **treelogs**.  and the **sampling interval** to `10^3`. Additionally, make sure the tree logs are being written to separate files by renaming the **FileName** for each tree to `$(filebase).$(tree).trees`.
+> Navigate to the **MCMC** tab. Set the **Chain Length** to **5e6** (5 million). Reveal the options for **tracelog** and set **Log Every** to **1000**. Now do the same for each of the 10 **treelogs**. Additionally, make sure the tree logs are being written to separate files by renaming the **FileName** for each tree to `$(filebase).$(tree).trees` if that is not already the filename ([Figure 16](#fig:mcmc)).
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/16-log-trees-separate.png">
-    <figcaption>Figure 15: Specify distinct tree log file names.</figcaption>
+    <a id="fig:mcmc"></a>
+    <img style="width:100%;" src="figures/16-log-trees-separate.png">
+    <figcaption>Figure 16: Specify distinct tree log file names.</figcaption>
 </figure>
 
 Now we are ready to save the XML file! 
@@ -356,6 +375,14 @@ Now we are ready to save the XML file!
  > **Tip:** 
  >
  > If BEAUti gives you trouble when generating the XML file and you’d like to proceed with the analysis right away, you can also download and use a [pre-made XML file](https://github.com/seidels/TiDeTree-Tutorial/tree/master/precooked_runs/tutorial-unlinked-birth-death.xml).
+
+
+
+
+
+
+
+
 
 ### Analyse the data
 
