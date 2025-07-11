@@ -10,24 +10,6 @@ figtreeversion: 1.4.x
 ---
 
 
----
-author: Sophie Seidel
-editor: Louis du Plessis
-level: Intermediate
-title: TiDeTree Tutorial
-subtitle: Reconstructing time-scaled single-cell phylogenies from genetic lineage
-  tracing data
-beastversion: ">= 2.7"
-tracerversion: 1.7.x
-figtreeversion: 1.4.x
-layout: tutorial
-tutorial: TiDeTree-tutorial
-permalink: "/:path/:basename:output_ext"
----
-
-
-
-
 
 # Background
 
@@ -274,7 +256,7 @@ Now, we want to set the priors for the parameters of our model.
 
 We'll start by choosing the phylodynamic model that describes how the trees were generated. Given the small size of the cell population (4 − 40 cells), we expect the population growth process to be highly stochastic. The birth-death-sampling model can account for these stochastic fluctuations.
 
-In BEAUti, you'll notice that a separate prior is defined for every tree. Since all colonies were grown under the same experimental conditions, we want them to share the same birth and death rate parameters. Unfortunately, BEAUti doesn’t currently support linking these priors directly through the interface. So we will first create an xml with separate parameters for each colony, and in a second step link the parameters by editing the XML and see how the runs compare.
+In BEAUti, you'll notice that a separate prior is defined for every tree. Since all colonies were grown under the same experimental conditions, we want them to share the same birth and death rate parameters. Unfortunately, BEAUti doesn’t currently support linking these priors directly through the interface. So we will first create an XML file with separate parameters for each colony, and in a second step link the parameters by editing the XML file and see how the runs compare.
 
 
 
@@ -374,91 +356,113 @@ Now we are ready to save the XML file!
 
  > **Tip:** 
  >
- > If BEAUti gives you trouble when generating the XML file and you’d like to proceed with the analysis right away, you can also download and use a [pre-made XML file](https://github.com/seidels/TiDeTree-Tutorial/tree/master/precooked_runs/tutorial-unlinked-birth-death.xml).
+ > If BEAUti gives you trouble when generating the XML file and you’d like to proceed with the analysis right away, you can also download and use a pre-made XML file `tutorial-unlinked-birth-death.xml` from the left-hand panel.
 
 
 
+----
+
+## Running BEAST2
+
+Now you are ready to start your BEAST2 analyses. 
+
+> Execute your XML file in **BEAST2**. You should see the screen output every 1000 steps, reporting the likelihood and various other statistics.
+
+----
 
 
+## Analysing the data
+
+### Unlinked analysis
+
+We will use Tracer to examine convergence and look at parameter estimates. For this section you can either use the log file output from your BEAST2 run, or the _pre-cooked_ output files on the left-hand panel.
 
 
+> Load the file `tutorial-unlinked-birth-death.log` into **Tracer** to assess mixing and the parameter estimates. (Note that your own log file may be called something else). 
 
-
-### Analyse the data
-
-> Load the tutorial-unlinked-birth-death.log file into Tracer to assess mixing and the parameter estimates.
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/17-tracer.png">
-    <figcaption>Figure 15: Check convergence.</figcaption>
+    <a id="fig:tracer"></a>
+    <img style="width:100%;" src="figures/17-tracer.png">
+    <figcaption>Figure 17: Checking convergence for the unlinked analysis.</figcaption>
 </figure>
 
-All parameters, including the posterior and likelihood, show effective sample sizes (ESS) above 200, indicating good mixing.
+All parameters, including the posterior and likelihood, show effective sample sizes (ESS) above 200, indicating good mixing ([Figure 17](fig:tracer)).
 
 
 Let's inspect the estimated clock rate, representing the rate of introducing an edit at any site in the barcode.
 
-> In Tracer, select **clockRate** and then click on **Marginal Density**.
+> In **Tracer**, select **clockRate** and then click on **Marginal Density** ([Figure 18](fig:log-clock)).
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/18-log-clock.png">
-    <figcaption>Figure 16: Estimated clock rate (edit rate) marginal posterior.</figcaption>
+    <a id="fig:log-clock"></a>
+    <img style="width:100%;" src="figures/18-log-clock.png">
+    <figcaption>Figure 18: Estimated clock rate (edit rate) marginal posterior.</figcaption>
 </figure>
 
 We see that the estimated median posterior rate is 0.015 edits per site per hour. Over the 54-hour experiment, this corresponds to 0.8 expected edits per site. 
 
-Now, let's examine the  **effective birth rates**  (net growth rates) per dataset.
+Now, let's examine the net growth rates (corresponding to the effective birth rates of the birth-death models) of each dataset.
 
-> Select **BDBirthRate[1-10]** and then click on **Estimates**.
-
-<figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/20-unlinked-net-growth.png">
-    <figcaption>Figure 17: Estimated net growth marginal posteriors.</figcaption>
-</figure>
-
-Most median estimates fluctuate around 0.04/hour, but the uncertainty is high—for example, the 95% highest posterior density (HPD) interval for alignment 1 ranges from [0.007 to 0.07].
-
-Next, we compare this to the **linked** analysis, where birth and death rates are shared across datasets. We have already prepared the xml and log for you. The key difference is that in our *unlinked* analysis, we estimated a separate birth and death rate for every dataset in every tree prior. In the *linked analysis*, we reference the same birth and death rates across tree priors, essentially pooling them across datasets which we show in the image below.
-*(Note: The unlinked analysis requires additional changes to the the XML, e.g., removing now-unnecessary parameter states, which we will not detail here. You’re welcome to explore the differences between the linked and unlinked XML files.)*
-
+> Select **BDBirthRate[1-10]** (select all 10 relative birth rates using **Shift+Click**) and then click on **Estimates**.
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/24-create-linked-xml.png">
-    <figcaption>Figure 18: XML hacking to pool birth and death rates across datasets.</figcaption>
+    <a id="fig:unlinked-net-growth"></a>
+    <img style="width:100%;" src="figures/20-unlinked-net-growth.png">
+    <figcaption>Figure 19: Estimated net growth marginal posteriors.</figcaption>
 </figure>
 
+Most median estimates fluctuate around 0.04/hour ([Figure 19](fig:unlinked-net-growth)), but the uncertainty is high—for example, the 95% highest posterior density (HPD) interval for alignment 1 ranges from [0.007 to 0.07].
 
 
 
-> Run the pre-made [XML file](https://github.com/seidels/TiDeTree-Tutorial/tree/master/precooked_runs/tutorial-linked-birth-death.xml) or directly load the pre-cooked [log](https://github.com/seidels/TiDeTree-Tutorial/tree/master/precooked_runs/tutorial-linked-birth-death.log) into Tracer.
+## Linked analysis
 
-We can see that all ESS values are above 200 and that the Traces look well mixed, indicating convergence.
+Next, we compare the **unlinked** analysis to a **linked** analysis, where birth and death rates are shared across datasets. We have already prepared the XML file and its output for you (available on the left-hand panel). 
+
+The key difference is that in our *unlinked* analysis, we estimated a separate birth and death rate for every dataset in every tree prior. In the *linked analysis*, we reference the same birth and death rates across tree priors, essentially pooling them across datasets which we show in the image below.
+
+> **Note** 
+> 
+> To create the XML file for the unlinked analysis requires additional manual changes to the XML file, e.g., removing now-unnecessary parameter states, which we will not detail here. You’re welcome to explore the differences between the linked and unlinked XML files ([Figure 20](fig:xml)).
 
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/28-linked-traces.png">
-    <figcaption>Figure 19: Check convergence.</figcaption>
+    <a id="fig:xml"></a>
+    <img style="width:100%;" src="figures/24-create-linked-xml.png">
+    <figcaption>Figure 20: XML hacking to pool birth and death rates across datasets.</figcaption>
 </figure>
 
+> Load the file `tutorial-linked-birth-death.log` into **Tracer**. Feel free to also run `tutorial-linked-birth-death.xml` and produce your own log and trees files.
 
-Let us now check the estimated net growth rates.
-> Click on BDBirthRate and the Maringal Density Tab.
+
+We can see that all ESS values are above 200 and that the Traces look well mixed, indicating convergence ([Figure 21](#fig:linked-tracer)).
+
 
 <figure>
-    <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/20-unlinked-net-growth.png">
-    <figcaption>Figure 20: Estimated net growth marginal posteriors pooled across alignments.</figcaption>
+    <a id="fig:linked-traces"></a>
+    <img style="width:100%;" src="figures/28-linked-traces.png">
+    <figcaption>Figure 21: Checking convergence for the linked analysis.</figcaption>
 </figure>
 
-We observe that the uncertainty is reduced, and the 95% HPD interval for the pooled **effective birth rate** is now **[0.02, 0.06]**, which corresponds to **at least 1–4 cell divisions** over the course of the experiment. The *“at least”* reflects that the effective birth rate equals the birth rate minus the death rate, providing a **lower bound** on the total number of divisions. This estimate aligns well with the original publication’s reported range of **3–5 divisions**.
+
+Let us now check how the estimated net growth rates compare to the unlinked analysis.
+
+> Click on **BDBirthRate[1-10]** and the Maringal Density Tab.
+
+> Select **BDBirthRate[1-10]** (select all 10 relative birth rates using **Shift+Click**) and then click on **Estimates**.
+
+<figure>
+    <a id="fig:unlinked-net-growth"></a>
+    <img style="width:100%;" src="figures/20-unlinked-net-growth.png">
+    <figcaption>Figure 22: Estimated net growth marginal posteriors pooled across alignments.</figcaption>
+</figure>
+
+We observe that the uncertainty is reduced, and the 95% HPD interval for the pooled **effective birth rate** is now **[0.02, 0.06]**, which corresponds to **at least 1–4 cell divisions** over the course of the experiment ([Figure 22](#fig:unlinked-net-growth)). The *“at least”* reflects that the effective birth rate equals the birth rate minus the death rate, providing a **lower bound** on the total number of cell divisions. This estimate aligns well with the original publication’s reported range of **3–5 divisions**.
 
 
 In summary, even though the individual dataset carried limited signal, pooling parameters across alignments allows us to  extract biologically meaningful estimates with reduced uncertainty.
 
+----
 
 ## Tree log visualisation
 
@@ -478,7 +482,7 @@ You can see that the cherry for cells 6 and 7 is well supported whereas the hier
 
 To summarise the posterior trees, we will use TreeAnnotator and generate two point estimates as you have seen in other tutorials, the maximum clade credibility tree (MCC) and the tree based on the conditional clade distribution (CCD). **To save time, you may run just one method and compare it to the other using the example below.**
 
-## Generating the MCC tree
+### Generating the MCC tree
 
 > Open **TreeAnnotator** and then set the options as in Fig. 22 below. You have to specify the **Burning percentage**, **Target tree type, Node heights, Input Tree File** and the **Output File**. Click **Run** to start the program.
 
@@ -488,7 +492,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
     <figcaption>Figure 22: TreeAnnotator settings for MCC tree.</figcaption>
 </figure>
 
-## Generating the CCD tree
+### Generating the CCD tree
 
 > Open **TreeAnnotator** and then set the options as in Fig. 23 below. Compared to generting the MCC tree you only have to change the **Target tree type** and the name of the  **Output file**. All other options remain the same. Click **Run** to start the program.
 
@@ -498,7 +502,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
     <figcaption>Figure 23: TreeAnnotator settings for CCD tree.</figcaption>
 </figure>
 
-## Analysing the summary trees
+### Analysing the summary trees
 
 > Open **FigTree** and load your chosen summary tree.
 >
