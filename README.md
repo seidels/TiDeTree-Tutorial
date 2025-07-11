@@ -11,6 +11,7 @@ figtreeversion: 1.4.x
 
 
 
+
 # Background
 
 Understanding how cells divide, differentiate, and die over time is central to developmental biology and cancer research. Recent advances in single-cell lineage recording allow us to track cell histories —but inferring developmental dynamics from these data requires statistical tools {% cite Askary2024 --file TiDeTree-Tutorial/master-refs %}.
@@ -217,7 +218,7 @@ Now, we have to set the clock model. For this relatively short experiment, we as
 <figure>
     <a id="fig:clock"></a>
     <img style="width:100%;" src="figures/clock.png">
-    <figcaption>Figure 9: Specifying the site model.</figcaption>
+    <figcaption>Figure 9: Specifying the clock model.</figcaption>
 </figure>
 
 > **Topic for discussion**
@@ -246,7 +247,7 @@ We'll initialise the tree using a custom starting tree class implemented within 
 <figure>
     <a id="fig:init-experiment-length"></a>
     <img style="width:100%;" src="figures/init-experiment-length.png">
-    <figcaption>Figure 11: Set the experiment duration.</figcaption>
+    <figcaption>Figure 11: Setting the experiment duration.</figcaption>
 </figure>
 
 
@@ -275,7 +276,7 @@ In BEAUti, you'll notice that a separate prior is defined for every tree. Since 
 <figure>
     <a id="fig:birth-rate"></a>
     <img style="width:100%;" src="figures/10-birth-rate.png">
-    <figcaption>Figure 12: Specify the prior on the effective birth rate. </figcaption>
+    <figcaption>Figure 12: Specifying the prior on the effective birth rate. </figcaption>
 </figure>
 
 Additionally, we also want to set the initial value of the effective birth rate to 0.05, such that it is contained within the prior distribution just set. 
@@ -286,7 +287,7 @@ Additionally, we also want to set the initial value of the effective birth rate 
 <figure>
     <a id="fig:init-birth-rate"></a>
     <img style="width:80%;" src="figures/11-init-birth-rate.png">
-    <figcaption>Figure 13: Set initial value for the effective birth rate.</figcaption>
+    <figcaption>Figure 13: Setting the initial value for the effective birth rate.</figcaption>
 </figure>
 
 
@@ -296,7 +297,7 @@ Additionally, we place a Uniform prior over [0, 1] on the relative death rate or
 <figure>
     <a id="fig:death-rate"></a>
     <img style="width:100%;" src="figures/11-death-rate.png">
-    <figcaption>Figure 14: Specify the prior on the relative death rate.</figcaption>
+    <figcaption>Figure 14: The default prior on the relative death rate.</figcaption>
 </figure>
 
 Finally, we set a prior on the clock rate.
@@ -309,7 +310,7 @@ This prior translates to us expecting between 1 to 10 edits to occur over 54 hou
 <figure>
     <a id="fig:prior-clock"></a>
     <img style="width:100%;" src="figures/12-prior-clock.png">
-    <figcaption>Figure 15: Specify the prior on the clock rate.</figcaption>
+    <figcaption>Figure 15: Specifying the prior on the clock rate.</figcaption>
 </figure>
 
 
@@ -339,7 +340,7 @@ Before we can save our XML file we need to set up the MCMC chain and the output 
 <figure>
     <a id="fig:mcmc"></a>
     <img style="width:100%;" src="figures/16-log-trees-separate.png">
-    <figcaption>Figure 16: Specify distinct tree log file names.</figcaption>
+    <figcaption>Figure 16: Specifying distinct tree log file names.</figcaption>
 </figure>
 
 Now we are ready to save the XML file! 
@@ -386,12 +387,12 @@ We will use Tracer to examine convergence and look at parameter estimates. For t
     <figcaption>Figure 17: Checking convergence for the unlinked analysis.</figcaption>
 </figure>
 
-All parameters, including the posterior and likelihood, show effective sample sizes (ESS) above 200, indicating good mixing ([Figure 17](fig:tracer)).
+All parameters, including the posterior and likelihood, show effective sample sizes (ESS) above 200, indicating good mixing ([Figure 17](#fig:tracer)).
 
 
 Let's inspect the estimated clock rate, representing the rate of introducing an edit at any site in the barcode.
 
-> In **Tracer**, select **clockRate** and then click on **Marginal Density** ([Figure 18](fig:log-clock)).
+> In **Tracer**, select **clockRate** and then click on **Marginal Density** ([Figure 18](#fig:log-clock)).
 
 <figure>
     <a id="fig:log-clock"></a>
@@ -411,7 +412,7 @@ Now, let's examine the net growth rates (corresponding to the effective birth ra
     <figcaption>Figure 19: Estimated net growth marginal posteriors.</figcaption>
 </figure>
 
-Most median estimates fluctuate around 0.04/hour ([Figure 19](fig:unlinked-net-growth)), but the uncertainty is high—for example, the 95% highest posterior density (HPD) interval for alignment 1 ranges from [0.007 to 0.07].
+Most median estimates fluctuate around 0.04/hour ([Figure 19](#fig:unlinked-net-growth)), but the uncertainty is high—for example, the 95% highest posterior density (HPD) interval for alignment 1 ranges from [0.007 to 0.07].
 
 
 
@@ -423,7 +424,7 @@ The key difference is that in our *unlinked* analysis, we estimated a separate b
 
 > **Note** 
 > 
-> To create the XML file for the unlinked analysis requires additional manual changes to the XML file, e.g., removing now-unnecessary parameter states, which we will not detail here. You’re welcome to explore the differences between the linked and unlinked XML files ([Figure 20](fig:xml)).
+> To create the XML file for the unlinked analysis requires additional manual changes to the XML file, e.g., removing now-unnecessary parameter states, which we will not detail here. You’re welcome to explore the differences between the linked and unlinked XML files ([Figure 20](#fig:xml)).
 
 
 <figure>
@@ -435,7 +436,7 @@ The key difference is that in our *unlinked* analysis, we estimated a separate b
 > Load the file `tutorial-linked-birth-death.log` into **Tracer**. Feel free to also run `tutorial-linked-birth-death.xml` and produce your own log and trees files.
 
 
-We can see that all ESS values are above 200 and that the Traces look well mixed, indicating convergence ([Figure 21](#fig:linked-tracer)).
+We can see that all ESS values are above 200 and that the Traces look well mixed, indicating convergence ([Figure 21](#fig:linked-traces)).
 
 
 <figure>
@@ -452,12 +453,12 @@ Let us now check how the estimated net growth rates compare to the unlinked anal
 > Select **BDBirthRate[1-10]** (select all 10 relative birth rates using **Shift+Click**) and then click on **Estimates**.
 
 <figure>
-    <a id="fig:unlinked-net-growth"></a>
-    <img style="width:100%;" src="figures/20-unlinked-net-growth.png">
+    <a id="fig:linked-net-growth"></a>
+    <img style="width:100%;" src="figures/21-linked-net-growth.png">
     <figcaption>Figure 22: Estimated net growth marginal posteriors pooled across alignments.</figcaption>
 </figure>
 
-We observe that the uncertainty is reduced, and the 95% HPD interval for the pooled **effective birth rate** is now **[0.02, 0.06]**, which corresponds to **at least 1–4 cell divisions** over the course of the experiment ([Figure 22](#fig:unlinked-net-growth)). The *“at least”* reflects that the effective birth rate equals the birth rate minus the death rate, providing a **lower bound** on the total number of cell divisions. This estimate aligns well with the original publication’s reported range of **3–5 divisions**.
+We observe that the uncertainty is reduced, and the 95% HPD interval for the pooled **effective birth rate** is now **[0.02, 0.06]**, which corresponds to **at least 1–4 cell divisions** over the course of the experiment ([Figure 22](#fig:linked-net-growth)). The *“at least”* reflects that the effective birth rate equals the birth rate minus the death rate, providing a **lower bound** on the total number of cell divisions. This estimate aligns well with the original publication’s reported range of **3–5 divisions**.
 
 
 In summary, even though the individual dataset carried limited signal, pooling parameters across alignments allows us to  extract biologically meaningful estimates with reduced uncertainty.
@@ -466,55 +467,59 @@ In summary, even though the individual dataset carried limited signal, pooling p
 
 ## Tree log visualisation
 
-Next, we want to visualise the trees. Be aware that how much sense it makes to look at the trees depends on the dataset and there very much on the number of sites that are used to trace lineage and how large the tree is that you are trying to estimate (the general data points vs number of parameters question). Remember, in every dataset here we have 10 sites, which is a much lower signal compared to thousands of sites used on applications in epidemiology or macroevolution.
+Next, we want to visualise the trees. Be aware that how much sense it makes to look at the trees depends on the dataset and very much on the number of sites that are used to trace lineages and how large the tree is that you are trying to estimate (the general data points vs number of parameters question). Remember, in every dataset here we have _only_ 10 sites, which is a much smaller signal compared to the thousands of sites commonly used in applications in epidemiology or macroevolution.
 
-Let us pick dataset 1 to visualuse which has 9 cells. To appreciate how much uncertainty there is in the tree structure, lets plot the tree posterior in Densitree.
+Let us pick dataset 1, which has 9 cells, to visualise. To appreciate how much uncertainty there is in the tree structure, lets plot the tree posterior in Densitree.
 
-> Open DensiTree and load the file tutorial-linked-birth-death.1.trees
+> Open **DensiTree** and load the file `tutorial-linked-birth-death.1.trees`
 
 <figure>
     <!--a id="fig:download"></a-->
-    <img style="width:80%;" src="figures/23-linked-trees-1-densitree.png">
-    <figcaption>Figure 21: Posterior distribution of trees.</figcaption>
+    <img style="width:100%;" src="figures/23-linked-trees-1-densitree.png">
+    <figcaption>Figure 23: Posterior distribution of trees for dataset 1 in the linked analysis.</figcaption>
 </figure>
 
-You can see that the cherry for cells 6 and 7 is well supported whereas the hierarcy among cells 0-3 has multiple consensus trees that can explain the data.
+You can see that the cherry for cells 6 and 7 is well supported whereas the hierarchy among cells 0-3 has multiple consensus trees that can explain the data.
 
-To summarise the posterior trees, we will use TreeAnnotator and generate two point estimates as you have seen in other tutorials, the maximum clade credibility tree (MCC) and the tree based on the conditional clade distribution (CCD). **To save time, you may run just one method and compare it to the other using the example below.**
+To summarise the posterior trees, we will use TreeAnnotator and generate two point estimates, as you have seen in other tutorials, the maximum clade credibility tree (MCC) and a tree based on the conditional clade distribution (CCD). **To save time, you may run just one method and compare it to the other using the example below.**
 
 ### Generating the MCC tree
 
-> Open **TreeAnnotator** and then set the options as in Fig. 22 below. You have to specify the **Burning percentage**, **Target tree type, Node heights, Input Tree File** and the **Output File**. Click **Run** to start the program.
+> Open **TreeAnnotator** and then set the options as in [Figure 24](#fig:ta-mcc) below. You have to specify the **Burn in percentage**, **Target tree type, Node heights, Input Tree File** and the **Output File**. 
+>
+> Click **Run** to start the program.
 
 <figure>
-    <!--a id="fig:ta-mcc"></a-->
+    <a id="fig:ta-mcc"></a>
     <img style="width:80%;" src="figures/25-ta-mcc.png">
-    <figcaption>Figure 22: TreeAnnotator settings for MCC tree.</figcaption>
+    <figcaption>Figure 24: TreeAnnotator settings for generating the MCC tree.</figcaption>
 </figure>
 
 ### Generating the CCD tree
 
-> Open **TreeAnnotator** and then set the options as in Fig. 23 below. Compared to generting the MCC tree you only have to change the **Target tree type** and the name of the  **Output file**. All other options remain the same. Click **Run** to start the program.
+> Open **TreeAnnotator** and then set the options as in [Figure 25](#fig:ta-ccd) below. Compared to generting the MCC tree you only have to change the **Target tree type** and the name of the  **Output file**. All other options remain the same. 
+>
+> Click **Run** to start the program.
 
 <figure>
-    <!--a id="fig:ta-ccd"></a-->
+    <a id="fig:ta-ccd"></a>
     <img style="width:80%;" src="figures/26-ta-ccd.png">
-    <figcaption>Figure 23: TreeAnnotator settings for CCD tree.</figcaption>
+    <figcaption>Figure 25: TreeAnnotator settings for generating the CCD tree.</figcaption>
 </figure>
 
 ### Analysing the summary trees
 
 > Open **FigTree** and load your chosen summary tree.
 >
-> On the left hand menu, select **Node Labels* and choose to display the **posterior** support at the internal nodes. Increase the Font size until the labels are clearly visible.
-
+> On the left hand menu, select **Node Labels** and choose to display the **posterior** support at the internal nodes. Increase the font size until the labels are clearly visible.
+>
 > Further, select **Node Bars** and display **height_95%_HPD** to display the 95% HPD for the node heights.
 >
 
 <figure>
     <!--a id="fig:ta-ccd"></a-->
     <img style="width:80%;" src="figures/27-figtree-ccd.png">
-    <figcaption>Figure 24: TreeAnnotator settings for CCD tree.</figcaption>
+    <figcaption>Figure 26: The CCD tree displayed in FigTree.</figcaption>
 </figure>
 
 > **Topic for discussion** 
@@ -535,4 +540,3 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
 # Relevant References
 
 {% bibliography --cited --file TiDeTree-Tutorial/master-refs.bib %}
-
