@@ -186,7 +186,7 @@ The data that we’ve loaded was sampled contemporaneously and we do not need to
 
 ### Specifying the site model
 
-
+Because a standard reversible substitution model (like a GTR or HKY model) is a poor description of the process that the lineage recorder uses to modify the target sites over time, TiDeTree uses a custom substitution model that is tailored to the lineage recording process {% cite Seidel2022 --file TiDeTree-Tutorial/master-refs %}.  
 
 
 > Navigate to the **Site Model** tab. As you have loaded the TiDeTree template, BEAUti automatically provides you with the **TiDeTree Substitution Model**.
