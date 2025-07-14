@@ -422,7 +422,7 @@ Next, we compare the **unlinked** analysis to a **linked** analysis, where birth
 
 The key difference is that in our *unlinked* analysis, we estimated a separate birth and death rate for every dataset in every tree prior. In the *linked analysis*, we reference the same birth and death rates across tree priors, essentially pooling them across datasets which we show in the image below.
 
-> **Creating the linked analysis XML file** 
+> **Creating the linked analysis XML file (optional)** 
 > 
 > To create the XML file for the linked analysis requires additional manual changes to the XML file, e.g., removing now-unnecessary parameter states. The key steps are outlined below ([Figure 20](#fig:xml)).
 >
@@ -450,7 +450,7 @@ The key difference is that in our *unlinked* analysis, we estimated a separate b
 >   - Modify the logger for `BDDeathRate.t:alignment_1` to be for `BDDeathRate.t`.
 >   - Remove the 9 other remaining birth and death rate loggers. 
 > 
-> You’re welcome to explore the differences between the linked and unlinked XML files. To make it easier to compare the two log files we simply commented out unneeded lines instead of deleting them.
+> You’re welcome to explore the differences between the linked and unlinked XML files! To make it easier to compare the two log files we simply commented out unneeded lines instead of deleting them.
 
 
 <figure>
