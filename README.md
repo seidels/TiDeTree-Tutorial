@@ -539,7 +539,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
 
 <figure>
     <a id="fig:ta-mcc"></a>
-    <img style="width:80%;" src="figures/25-ta-mcc.png">
+    <img style="width:80%;" src="figures/ta-mcc.png">
     <figcaption>Figure 24: TreeAnnotator settings for generating the MCC tree.</figcaption>
 </figure>
 
@@ -551,7 +551,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
 
 <figure>
     <a id="fig:ta-ccd"></a>
-    <img style="width:80%;" src="figures/26-ta-ccd.png">
+    <img style="width:80%;" src="figures/ta-ccd.png">
     <figcaption>Figure 25: TreeAnnotator settings for generating the CCD tree.</figcaption>
 </figure>
 
@@ -568,7 +568,7 @@ To summarise the posterior trees, we will use TreeAnnotator and generate two poi
 
 <figure>
     <!--a id="fig:ta-ccd"></a-->
-    <img style="width:80%;" src="figures/27-figtree-ccd.png">
+    <img style="width:80%;" src="figures/figtree-ccd.png">
     <figcaption>Figure 26: The CCD tree displayed in FigTree.</figcaption>
 </figure>
 
