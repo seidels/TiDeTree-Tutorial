@@ -16,7 +16,7 @@ figtreeversion: 1.4.x
 
 Understanding how cells divide, differentiate, and die over time is central to developmental biology and cancer research. Recent advances in single-cell lineage recording allow us to track cell histories —but inferring developmental dynamics from these data requires statistical tools {% cite Askary2024 --file TiDeTree-Tutorial/master-refs %}.
 
-TiDeTree {% cite Seidel2022 --file TiDeTree-Tutorial/master-refs %} is a BEAST 2 package designed for statistical inference from such single-cell recording data. It jointly infers time-scaled single-cell phylogenies and editing model parameters, including editing rates (analogous to molecular clock rates) and the probabilities of different editing outcomes. Beyond tree reconstruction, TiDeTree enables the inference of cell population dynamics, such as cell division, death and differentiation rates.
+TiDeTree {% cite Seidel2022 --file TiDeTree-Tutorial/master-refs %} is a BEAST2 package designed for statistical inference from such single-cell recording data. It jointly infers time-scaled single-cell phylogenies and editing model parameters, including editing rates (analogous to molecular clock rates) and the probabilities of different editing outcomes. Beyond tree reconstruction, TiDeTree enables the inference of cell population dynamics, such as cell division, death and differentiation rates.
 
 This tutorial will guide you through the setup and application of TiDeTree using an example dataset. You will learn how to model the editing process, reconstruct timed cell phylogenies, and estimate parameters describing the underlying cellular dynamics.
 
@@ -48,6 +48,13 @@ Tracer ([http://tree.bio.ed.ac.uk/software/tracer](http://tree.bio.ed.ac.uk/soft
 
 FigTree ([http://tree.bio.ed.ac.uk/software/figtree](http://tree.bio.ed.ac.uk/software/figtree)) is a program for viewing trees and producing publication-quality figures. It can interpret the node-annotations created on the summary trees by TreeAnnotator, allowing the user to display node-based statistics (e.g. posterior probabilities). We will be using FigTree v{{ page.figtreeversion }}.
 
+### DensiTree
+
+Bayesian analysis using BEAST2 provides an estimate of the uncertainty in tree space. This distribution is represented by a set of trees, which can be rather large and difficult to interpret. DensiTree is a program for qualitative analysis of sets of trees. DensiTree allows to quickly get an impression of properties of the tree set such as well-supported clades, distribution of tree heights and areas of topological uncertainty.
+
+DensiTree is provided as a part of the BEAST2 package so you do not need to install it separately.
+
+
 ----
 
 # Practical: TiDeTree Tutorial
@@ -68,10 +75,14 @@ TiDeTree can be easily installed via the BEAUti package manager.
 > 
 > Then scroll down, highlight the **TiDeTree package** and click on the **Install/Upgrade** button ([Figure 1](#fig:download)).
 
+Later we will create a CCD summary tree, for which we need the CCD package to be installed. 
+
+> Use the **BEAST2 Package Manager** to install the **CCD** package. 
+
 <figure>
     <a id="fig:download"></a>
     <img style="width:100%;" src="figures/download.png">
-    <figcaption>Figure 1:  Installing TiDeTree via the Package Manager</figcaption>
+    <figcaption>Figure 1:  Installing TiDeTree via the Package Manager.</figcaption>
 </figure>
 
 > Close the **BEAST2 Package Manager** and _**restart**_ BEAUti to fully load the **TiDeTree** package.
@@ -95,9 +106,9 @@ To understand how the cells divide over time, each colony was lineage traced usi
 
 
 ### Creating `.tidetree` input files
-Usually BEAST 2 expects an alignment of nucleotides as input. However, our alignment consists of integers, encoding the different editing outcomes (e.g. 0, 1 or 2). To still enable BEAUti to load our data, we have to create `.tidetree` files (which under the hood make BEAUti use an `AlignmentFromNexus` importer class that accepts integer values separated by commas).
+Usually BEAST2 expects an alignment of nucleotides as input. However, our alignment consists of integers, encoding the different editing outcomes (e.g. 0, 1 or 2). To still enable BEAUti to load our data, we have to create `.tidetree` files. These files are similar to the commonly used NEXUS file format for  alignments of genetic sequences or morphological characters, with one small change-in a standard NEXUS file the sequence is simply a string, but in `.tidetree` files sites in the sequence are separated by commas. This allows us to use integers to represent data with more than 10 editing outcomes (states) at each site. 
 
-We provide [a script](https://github.com/seidels/tidetree/tree/main/scripts) to convert standard `.csv` files into `.tidetree` files (in NEXUS format). For this tutorial, we will work directly with the `.tidetree` files.
+We provide [a script](https://github.com/seidels/tidetree/tree/main/scripts) to convert standard `.csv` files into `.tidetree` files. For this tutorial, we will work directly with the `.tidetree` files.
 
 <figure>
     <a id="fig:download"></a>
@@ -123,8 +134,9 @@ We will use BEAUti2 to select the priors and starting values for our analysis an
 
 Next we will load the `.tidetree` input files from the mouse embryonic stem cell experiment.
 
-
-> To load the data, select **File > Add Alignment** and navigate to the directory containing the tutorial data. This directory contains 10 `.tidetree` files, each containing the data for a colony. Since the directory contains only these files and nothing else, we can select them all simply using **Ctrl+A** (or **Command+A** on a Mac) and then click on **Open**. 
+> First download the 10 `.tidetree` files, each containing the data for a colony, under the **Data** heading on the left-hand panel. Alternatively, clone the **GitHub** repository, also linked on the left-hand panel, which will also download all the tutorial files to your computer.
+> 
+> To load the data, select **File > Add Alignment** and navigate to the directory containing the `.tidetree` files. Select all files using **Shift+Click** and then click on **Open**. 
 >
 > If you are short on time, feel free to only load the first 3 alignments for the purpose of going through the tutorial, because we will have to repeat some steps for each alignment.
 
@@ -133,7 +145,7 @@ Now you should see 10 new records—one for each alignment—listed in BEAUti ([
 <figure>
     <a id="fig:partitions"></a>
     <img style="width:100%;" src="figures/dat-in-beauti.png">
-    <figcaption>Figure 4: Importing the alignments into BEAUTI. </figcaption>
+    <figcaption>Figure 4: Importing the alignments into BEAUti. </figcaption>
 </figure>
 
 > Double click on one of the alignments to display its contents ([Figure 5](#fig:alignment-beauti)).
@@ -141,13 +153,13 @@ Now you should see 10 new records—one for each alignment—listed in BEAUti ([
 <figure>
     <a id="fig:alignment-beauti"></a>
     <img style="width:50%;" src="figures/alignment-beauti.png">
-    <figcaption>Figure 5: One of the alignments as displayed in BEAUTI. </figcaption>
+    <figcaption>Figure 5: One of the alignments as displayed in BEAUti. </figcaption>
 </figure>
 
 
 By default, BEAUti treats each dataset independently, assigning separate site, clock, and tree models to each one. However, since all our data was generated under the same experimental conditions, it makes sense to assume that the editing process was governed by the same parameters across datasets.
 
-To reflect this, we’ll link the Clock Models and Site Models across the datasets. This means that instead of estimating separate parameters for each alignment, BEAST 2 will infer a single, shared set of parameters for the editing process.
+To reflect this, we’ll link the Clock Models and Site Models across the datasets. This means that instead of estimating separate parameters for each alignment, BEAST2 will infer a single, shared set of parameters for the editing process.
 
 > Click on one row and then press **Ctrl+A**, (or **Command+A** on a Mac) to select all alignments. Then, click on **Link Site Models** and **Link Clock Models** ([Figure 6](#fig:linkedmodels)).
 >
@@ -178,7 +190,7 @@ The data that we’ve loaded was sampled contemporaneously and we do not need to
 <figure>
     <a id="fig:tip-dates"></a>
     <img style="width:100%;" src="figures/tip-dates.png">
-    <figcaption>Figure 7: Tip dates panel setup</figcaption>
+    <figcaption>Figure 7: Tip dates panel setup.</figcaption>
 </figure>
 
 
@@ -193,7 +205,7 @@ Because a standard reversible substitution model (like a GTR or HKY model) is a 
 >
 > We keep the **Gamma Category Count** set at **0**, which means that we are not modelling site heterogeneity. Further below, you can see the parameters of the substition model. The **Edit Rates** are initialised and set to be estimated. Based on the `.tidetree` files, BEAUti correctly detected that there are 2 edit outcomes and therefore initialised a vector with 2 elements.
 >
-> You’ll also see the **Silencing Rate** parameter, which models the possibility that certain barcode targets become progressively and irreversibly silenced—preventing their detection through single-cell RNA sequencing. In our dataset, no silencing was observed, so we set the value to **0.0** and uncheck the **estimate** box. Lastly, we set the **Edit Height** and **Edit Duration** to **54**, since editing was active for the entire duration of the experiment (54 hours).
+> You’ll also see the **Silencing Rate** parameter, which models the possibility that certain barcode targets become progressively and irreversibly silenced—preventing their detection through single-cell RNA sequencing. In our dataset, no silencing was observed, so we set the value to **0.0** and uncheck the **estimate** box. Lastly, we set the **Edit Height** (the duration between the onset of editing and sampling of the cells) and **Edit Duration** (the duration of the editing process) to **54**, since editing was active for the entire duration of the experiment (54 hours).
 
 Your site model tab should now look as in [Figure 8](#fig:substmodel).
 
@@ -233,6 +245,8 @@ Next, we come to the parameter initialization tab. Here, we will initialise the 
 
 We'll initialise the tree using a custom starting tree class implemented within the TiDeTree package. The key idea is to ensure that the tree fits within the timeframe of the experiment and does not have a 0 likelihood. By setting the root height close to the total duration (e.g., 53 hours for a 54-hour experiment), and matching the editing height and editing duration, we ensure that the tree has a positive likelihood.
 
+The experiment length is the total time from the start of the experiment with one stem cell until the end, when the colony was sampled and sequenced. While the root of the tree, representing the first cell-division event in the experiment, cannot be older than the start of the experiment, it is in general younger. That is, the progenitor stem cell usually doesn't immediately divide at the start of the experiment, but there is usually a lag before the first division. That is why we set the root height to be less than the experiment lenght. 
+
 > Navigate to the **Initialization** tab. Now set the **Root Height**, **Edit Duration** and **Edit Height** to **53** for each of the 10 **Tree.t** parameters, representing the 10 alignments ([Figure 10](#fig:init-tree)). 
 
 
@@ -260,7 +274,7 @@ We'll start by choosing the phylodynamic model that describes how the trees were
 In BEAUti, you'll notice that a separate prior is defined for every tree. Since all colonies were grown under the same experimental conditions, we want them to share the same birth and death rate parameters. Unfortunately, BEAUti doesn’t currently support linking these priors directly through the interface. So we will first create an XML file with separate parameters for each colony, and in a second step link the parameters by editing the XML file and see how the runs compare.
 
 
-
+<!-- Figure unnecessary/uninformative -->
 <!--figure>
     <a id="fig:download"></a>
     <img style="width:80%;" src="figures/9-trees.png">
@@ -314,6 +328,7 @@ This prior translates to us expecting between 1 to 10 edits to occur over 54 hou
 </figure>
 
 
+<!-- Figure unnecessary/uninformative -->
 <!--figure>
     Here's a snapshot of how your overall prior tab should now look like.
 
@@ -326,7 +341,7 @@ This prior translates to us expecting between 1 to 10 edits to occur over 54 hou
 
 > **Topic for discussion**
 > 
-> How do you expect the results to differ when birth and death rates are shared amonog alignments?
+> How do you expect the results to differ when birth and death rates are shared among alignments?
 >
 
 
@@ -335,7 +350,9 @@ This prior translates to us expecting between 1 to 10 edits to occur over 54 hou
 
 Before we can save our XML file we need to set up the MCMC chain and the output files.
 
-> Navigate to the **MCMC** tab. Set the **Chain Length** to **5E6** (5 million). Reveal the options for **tracelog** and set **Log Every** to **1000**. Now do the same for each of the 10 **treelogs**. Additionally, make sure the tree logs are being written to separate files by renaming the **FileName** for each tree to `$(filebase).$(tree).trees` if that is not already the filename ([Figure 16](#fig:mcmc)).
+> Navigate to the **MCMC** tab. Set the **Chain Length** to **5E6** (5 million). Reveal the options for **tracelog** and set **Log Every** to **1000** (which should be the default logging frequency). 
+>
+> Now do the same for each of the 10 **treelogs**. Additionally, make sure the tree logs are being written to separate files by renaming the **FileName** for each tree to `$(filebase).$(tree).trees` if that is not already the filename ([Figure 16](#fig:mcmc)).
 
 <figure>
     <a id="fig:mcmc"></a>
@@ -347,7 +364,7 @@ Now we are ready to save the XML file!
 
 > Once your analysis is fully set up, go to **File > Save**, navigate to your desired directory, and save the BEAST input file with a clear and descriptive name—e.g., `tidetree_tutorial.xml`.
 
-
+<!-- Figure unnecessary/uninformative -->
 <!--figure>
     <a id="fig:download"></a>
     <img style="width:80%;" src="figures/15-MCMC.png">
@@ -392,7 +409,7 @@ All parameters, including the posterior and likelihood, show effective sample si
 
 Let's inspect the estimated clock rate, representing the rate of introducing an edit at any site in the barcode.
 
-> In **Tracer**, select **clockRate** and then click on **Marginal Density** ([Figure 18](#fig:log-clock)).
+> In **Tracer**, select **clockRate.c:clockmodel** and then click on **Marginal Density** ([Figure 18](#fig:log-clock)).
 
 <figure>
     <a id="fig:log-clock"></a>
@@ -404,7 +421,7 @@ We see that the estimated median posterior rate is about 0.015 edits per site pe
 
 Now, let's examine the net growth rates (corresponding to the effective birth rates of the birth-death models) of each dataset.
 
-> Select **BDBirthRate[1-10]** (select all 10 relative birth rates using **Shift+Click**) and then click on **Estimates**.
+> Select **BDBirthRate.t:alignment[1-10]** (select all 10 relative birth rates using **Shift+Click**) and then click on **Estimates**.
 
 <figure>
     <a id="fig:unlinked-net-growth"></a>
@@ -412,7 +429,7 @@ Now, let's examine the net growth rates (corresponding to the effective birth ra
     <figcaption>Figure 19: Estimated net growth marginal posteriors.</figcaption>
 </figure>
 
-Most median estimates fluctuate around 0.04/hour ([Figure 19](#fig:unlinked-net-growth)), but the uncertainty is high—for example, the 95% highest posterior density (HPD) interval for alignment 1 ranges from [0.007 to 0.07].
+Most median estimates fluctuate around 0.04/hour ([Figure 19](#fig:unlinked-net-growth)), but the uncertainty is high—for example, the 95% highest posterior density (HPD) interval for alignment 1 ranges from around [0.007 to 0.07].
 
 
 
@@ -422,29 +439,28 @@ Next, we compare the **unlinked** analysis to a **linked** analysis, where birth
 
 The key difference is that in our *unlinked* analysis, we estimated a separate birth and death rate for every dataset in every tree prior. In the *linked analysis*, we reference the same birth and death rates across tree priors, essentially pooling them across datasets which we show in the image below.
 
-
 > **Creating the linked analysis XML file (optional)** 
 > 
-> To create the XML file for the linked analysis requires additional manual changes to the XML file, e.g., removing now-unnecessary parameter states. The key steps are outlined below ([Figure 20](#fig:xml)).
+> To create the XML file for the linked analysis requires additional manual changes to the XML file, e.g., removing now-unnecessary parameter states. The key steps are outlined below ([Figure 20](#fig:xml)). You can edit the XML file in any text editor, however it is best to use an editor designed for programming, since these usually have built-in syntax highlighting that makes it easier to read the XML file.
 >
 > - _State variables_
 >   - Find the `<state>` element (where all the parameters that are operated on are stored).
 >   - Rename `BDBirthRate.t:alignment_1` and `BDDeathRate.t:alignment_1` to simply `BDBirthRate.t` and `BDDeathRate.t`.
 >   - Remove the 9 other remaining birth and death rates from the state.
 > - _Tree priors_
->   - Find the 10 birth death tree priors inside the prior (`<distribution id="prior">` element).
+>   - Find the 10 birth death tree priors (elements containing `spec="beast.base.evolution.speciation.BirthDeathGernhard08Model"`) inside the prior (`<distribution id="prior">` element).
 >   - Set the **birthDiffRate** of each birth death model to `BDBirthRate.t`.
 >   - Set the **relativeDeathRate** of each birth death model to `BDDeathRate.t`.
 > - _Parameter priors_
->   - Find the hyperpriors for the birth death model hyperparameters, just after the tree priors.
+>   - Find the hyperpriors for the birth death model hyperparameters, usually just after the tree priors.
 >   - Modify the prior distribution for `BDBirthRate.t:alignment_1` to be for `BDBirthRate.t`.
 >   - Modify the prior distribution for `BDDeathRate.t:alignment_1` to be for `BDDeathRate.t`.
 >   - Remove the 9 other remaining birth and death rate priors. 
 > - _Operators_
->   - Find the operators section, just after the likelihoods.
+>   - Find the operators section, usually just after the likelihood (`<distribution id="likelihood">` element).
 >   - Modify the single scale operator for `BDBirthRate.t:alignment_1` to be for `BDBirthRate.t`.
->   - Modify the single scaleoperator for `BDDeathRate.t:alignment_1` to be for `BDDeathRate.t`.
->   - Remove the 9 other remaining birth and death rate operators.
+>   - Modify the single scale operator for `BDDeathRate.t:alignment_1` to be for `BDDeathRate.t`.
+>   - Remove the 9 other remaining birth and death rate scale operators.
 > - _Loggers_
 >   - Find the file log toward the end of the file (`<logger id="tracelog">` element).
 >   - Modify the logger for `BDBirthRate.t:alignment_1` to be for `BDBirthRate.t`.
@@ -456,7 +472,7 @@ The key difference is that in our *unlinked* analysis, we estimated a separate b
 
 <figure>
     <a id="fig:xml"></a>
-    <img style="width:100%;" src="figures/24-create-linked-xml.png">
+    <img style="width:100%;" src="figures/create-linked-xml.png">
     <figcaption>Figure 20: XML hacking to pool birth and death rates across datasets.</figcaption>
 </figure>
 
@@ -476,7 +492,7 @@ We can see that all ESS values are above 200 and that the Traces look well mixed
 
 Let us now check how the estimated net growth rates compare to the unlinked analysis.
 
-> Select on **BDBirthRate.t:alignment_1** and and then click on **Estimates**. Note that because the relative birth rates are linked we only have one parameter in the log file. 
+> Select on **BDBirthRate.t** and and then click on **Estimates**. Note that because the relative birth rates are linked we only have one parameter in the log file. 
 
 
 <figure>
@@ -485,7 +501,7 @@ Let us now check how the estimated net growth rates compare to the unlinked anal
     <figcaption>Figure 22: Estimated net growth marginal posteriors pooled across alignments.</figcaption>
 </figure>
 
-We observe that the uncertainty is reduced, and the 95% HPD interval for the pooled **effective birth rate** is now **[0.02, 0.06]**, which corresponds to **at least 1–4 cell divisions** over the course of the experiment ([Figure 22](#fig:linked-net-growth)). The *“at least”* reflects that the effective birth rate equals the birth rate minus the death rate, providing a **lower bound** on the total number of cell divisions. This estimate aligns well with the original publication’s reported range of **3–5 divisions**.
+We observe that the uncertainty is reduced, and the 95% HPD interval for the pooled **effective birth rate** is now around **[0.02, 0.06]**, which corresponds to **at least 1–4 cell divisions** over the course of the experiment ([Figure 22](#fig:linked-net-growth)). The *“at least”* reflects that the effective birth rate equals the birth rate minus the death rate, providing a **lower bound** on the total number of cell divisions. This estimate aligns well with the original publication’s reported range of **3–5 divisions**.
 
 
 In summary, even though the individual dataset carried limited signal, pooling parameters across alignments allows us to  extract biologically meaningful estimates with reduced uncertainty.
@@ -498,68 +514,77 @@ Next, we want to visualise the trees. Be aware that how much sense it makes to l
 
 Let us pick dataset 1, which has 9 cells, to visualise. To appreciate how much uncertainty there is in the tree structure, lets plot the tree posterior in Densitree.
 
-> Open **DensiTree** and load the file `tutorial-linked-birth-death.1.trees`
+> Open **DensiTree** and load the file `tutorial-linked-birth-death.alignment_1.trees`
+>
+> Click on **Show** and 
+> - check **Root Canal**
+> - check **Consensus Trees**
+> - uncheck **All Trees**
 
 <figure>
     <!--a id="fig:download"></a-->
-    <img style="width:100%;" src="figures/23-linked-trees-1-densitree.png">
+    <img style="width:100%;" src="figures/linked-trees-1-densitree.png">
     <figcaption>Figure 23: Posterior distribution of trees for dataset 1 in the linked analysis.</figcaption>
 </figure>
 
-You can see that the cherry for cells 6 and 7 is well supported whereas the hierarchy among cells 0-3 has multiple consensus trees that can explain the data.
+You can see that the cherry for the two cells at the bottom is well supported whereas the hierarchy among cells in the clade in the middle has multiple consensus trees that can explain the data.
 
 To summarise the posterior trees, we will use TreeAnnotator and generate two point estimates, as you have seen in other tutorials, the maximum clade credibility tree (MCC) and a tree based on the conditional clade distribution (CCD). **To save time, you may run just one method and compare it to the other using the example below.**
 
 ### Generating the MCC tree
 
-> Open **TreeAnnotator** and then set the options as in [Figure 24](#fig:ta-mcc) below. You have to specify the **Burn in percentage**, **Target tree type, Node heights, Input Tree File** and the **Output File**. 
+> Open **TreeAnnotator** and then set the options as in [Figure 24](#fig:ta-mcc) below. You have to specify the **Burn in percentage**, **Target tree type, Node heights, Input Tree File** (`tutorial-linked-birth-death.alignment_1.trees`) and the **Output File** (`tutorial-linked-birth-death.alignment_1.mcc.tree`). 
 >
 > Click **Run** to start the program.
 
 <figure>
     <a id="fig:ta-mcc"></a>
-    <img style="width:80%;" src="figures/25-ta-mcc.png">
+    <img style="width:80%;" src="figures/ta-mcc.png">
     <figcaption>Figure 24: TreeAnnotator settings for generating the MCC tree.</figcaption>
 </figure>
 
 ### Generating the CCD tree
 
-> Open **TreeAnnotator** and then set the options as in [Figure 25](#fig:ta-ccd) below. Compared to generting the MCC tree you only have to change the **Target tree type** and the name of the  **Output file**. All other options remain the same. 
+> Open **TreeAnnotator** and then set the options as in [Figure 25](#fig:ta-ccd) below. Compared to generating the MCC tree you only have to change the **Target tree type** and the name of the  **Output file**. All other options remain the same. 
 >
 > Click **Run** to start the program.
 
 <figure>
     <a id="fig:ta-ccd"></a>
-    <img style="width:80%;" src="figures/26-ta-ccd.png">
+    <img style="width:80%;" src="figures/ta-ccd.png">
     <figcaption>Figure 25: TreeAnnotator settings for generating the CCD tree.</figcaption>
 </figure>
 
 ### Analysing the summary trees
 
-> Open **FigTree** and load your chosen summary tree.
+> Open **FigTree** and load your chosen summary tree (below we show the CCD tree).
 >
-> On the left hand menu, select **Node Labels** and choose to display the **posterior** support at the internal nodes. Increase the font size until the labels are clearly visible.
+> On the left hand menu, check **Node Labels** and choose to display the **posterior** support at the internal nodes. Increase the font size until the labels are clearly visible. Also adjust the font size of the tip labels.
 >
-> Further, select **Node Bars** and display **height_95%_HPD** to display the 95% HPD for the node heights.
+> Further, check **Node Bars** and display **height_95%_HPD** to display the 95% HPD for the node heights. You can also widen the node bars so the node labels are more visible.
 >
+> 
+> Finally, uncheck **Scale Bar**, check **Scale Axis** and check **Reverse axis** after expanding.
 
 <figure>
     <!--a id="fig:ta-ccd"></a-->
-    <img style="width:80%;" src="figures/27-figtree-ccd.png">
+    <img style="width:80%;" src="figures/figtree-ccd.png">
     <figcaption>Figure 26: The CCD tree displayed in FigTree.</figcaption>
 </figure>
 
 > **Topic for discussion** 
 >
 > How do the posterior node labels compare to the observations we made when analysing the tree posterior in DensiTree?
+>
+> Do the MCC and CCD trees differ in any way? 
 
 
 ----
 
 # Useful Links
 
-- [Bayesian Evolutionary Analysis with BEAST 2](http://www.beast2.org/book.html) {% cite BEAST2book2014 --file TiDeTree-Tutorial/master-refs.bib %}
-- BEAST 2 website and documentation: [http://www.beast2.org/](http://www.beast2.org/)
+- [Bayesian Evolutionary Analysis with BEAST2](http://www.beast2.org/book.html) {% cite BEAST2book2014 --file TiDeTree-Tutorial/master-refs.bib %}
+- BEAST2 website and documentation: [http://www.beast2.org/](http://www.beast2.org/)
 - Join the BEAST user discussion: [http://groups.google.com/group/beast-users](http://groups.google.com/group/beast-users) 
 
 ----
