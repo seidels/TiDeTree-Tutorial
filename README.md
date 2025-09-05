@@ -422,9 +422,36 @@ Next, we compare the **unlinked** analysis to a **linked** analysis, where birth
 
 The key difference is that in our *unlinked* analysis, we estimated a separate birth and death rate for every dataset in every tree prior. In the *linked analysis*, we reference the same birth and death rates across tree priors, essentially pooling them across datasets which we show in the image below.
 
-> **Note** 
+
+> **Creating the linked analysis XML file (optional)** 
 > 
-> To create the XML file for the unlinked analysis requires additional manual changes to the XML file, e.g., removing now-unnecessary parameter states, which we will not detail here. You’re welcome to explore the differences between the linked and unlinked XML files ([Figure 20](#fig:xml)).
+> To create the XML file for the linked analysis requires additional manual changes to the XML file, e.g., removing now-unnecessary parameter states. The key steps are outlined below ([Figure 20](#fig:xml)).
+>
+> - _State variables_
+>   - Find the `<state>` element (where all the parameters that are operated on are stored).
+>   - Rename `BDBirthRate.t:alignment_1` and `BDDeathRate.t:alignment_1` to simply `BDBirthRate.t` and `BDDeathRate.t`.
+>   - Remove the 9 other remaining birth and death rates from the state.
+> - _Tree priors_
+>   - Find the 10 birth death tree priors inside the prior (`<distribution id="prior">` element).
+>   - Set the **birthDiffRate** of each birth death model to `BDBirthRate.t`.
+>   - Set the **relativeDeathRate** of each birth death model to `BDDeathRate.t`.
+> - _Parameter priors_
+>   - Find the hyperpriors for the birth death model hyperparameters, just after the tree priors.
+>   - Modify the prior distribution for `BDBirthRate.t:alignment_1` to be for `BDBirthRate.t`.
+>   - Modify the prior distribution for `BDDeathRate.t:alignment_1` to be for `BDDeathRate.t`.
+>   - Remove the 9 other remaining birth and death rate priors. 
+> - _Operators_
+>   - Find the operators section, just after the likelihoods.
+>   - Modify the single scale operator for `BDBirthRate.t:alignment_1` to be for `BDBirthRate.t`.
+>   - Modify the single scaleoperator for `BDDeathRate.t:alignment_1` to be for `BDDeathRate.t`.
+>   - Remove the 9 other remaining birth and death rate operators.
+> - _Loggers_
+>   - Find the file log toward the end of the file (`<logger id="tracelog">` element).
+>   - Modify the logger for `BDBirthRate.t:alignment_1` to be for `BDBirthRate.t`.
+>   - Modify the logger for `BDDeathRate.t:alignment_1` to be for `BDDeathRate.t`.
+>   - Remove the 9 other remaining birth and death rate loggers. 
+> 
+> You’re welcome to explore the differences between the linked and unlinked XML files! To make it easier to compare the two log files we simply commented out unneeded lines instead of deleting them.
 
 
 <figure>
